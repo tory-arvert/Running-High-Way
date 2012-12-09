@@ -1,0 +1,11 @@
+/*.sdf
+/*.suo
+/ipch
+/Debug
+/Release
+/*/Debug
+/*/Release
+/Document/html
+/Library/*
+!/Library/.gitkeep
+/*/Application/scripts/Textures.txt
