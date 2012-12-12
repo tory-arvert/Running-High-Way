@@ -2,8 +2,46 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Framework.cpp" />
+    <ClCompile Include="Window\Window.cpp">
+      <Filter>Window</Filter>
+    </ClCompile>
+    <ClCompile Include="include\Vector2.cpp">
+      <Filter>include</Filter>
+    </ClCompile>
+    <ClCompile Include="include\Vector3.cpp">
+      <Filter>include</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework.h" />
+    <ClInclude Include="Window\Window.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\vector2.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vector2Impl.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TemplateBaseClass.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vector3.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Vector3Impl.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Window">
+      <UniqueIdentifier>{d93c6e2f-5da2-40e8-8182-074168e7e2a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{5f64dec3-b140-49ea-a07a-a221e599701a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{ca24ceeb-b5f7-4aee-9e25-720803e2555b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

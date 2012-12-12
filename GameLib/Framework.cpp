@@ -25,8 +25,8 @@
 
 #include "Framework.h"
 #include "Window/Window.h"
-#include "Graphics/GraphicsManager.h"
-#include "FileIO/FileIOManager.h"
+//#include "Graphics/GraphicsManager.h"
+//#include "FileIO/FileIOManager.h"
 
 
 using namespace std;
@@ -82,19 +82,20 @@ namespace GameLib{
     void Framework::Create(){
 
         // 作成済みかどうか確認する。
-        if( gImpl.get() != NULL){
-            ::MessageBeep(MB_ICONASTERISK);
+        if(gImpl != nullptr){
             MessageBox(NULL,_T("FrameWorkの実体を複数作成しようとしました。"),_T("インスタンス作成中止"),MB_OK);
             return;
         }
-
+         
         // 問題なければ実体を作成
-        gImpl.reset(new Impl() );
+         gImpl.reset(new Impl() );
+         
+
 
         // その他に必要なManagerを初期化(create)する。
         
         // ウィンドウマネージャ作成
-        L_WindowCreator w;
+        WindowCreator w;
         // 初期化
         w.Create();
         w.SetWidth( 1024 );
@@ -102,21 +103,6 @@ namespace GameLib{
         w.SetTitle( _T("Library Test") );              
         w.Show();
 
-        /*
-        // GraphicsManagerを初期化
-        GameLib::Graphics::GraphicsManager Gm;
-        //gImplを作成
-        Gm.Create();
-
-        Gm.InitManager();
-
-
-        // FileIOManagerを初期化
-        GameLib::FileIO::FileIOManager Fm;
-        //gImplを作成
-        Fm.Create();
-        
-        */
 
     }
 

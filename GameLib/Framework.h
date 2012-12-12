@@ -32,8 +32,9 @@ namespace GameLib
         class Framework
         {
             //----------------------------------------------------------
-        public: // 特殊メンバ
-
+            // 特殊メンバ
+        public:
+            
             /// @brief コンストラクタ
             Framework();
 
@@ -41,7 +42,8 @@ namespace GameLib
             virtual ~Framework();
 
             //----------------------------------------------------------
-        public: // メンバ関数
+            // メンバ関数
+        public: 
 
             /// @brief インスタンスを作成します。
             void Create();

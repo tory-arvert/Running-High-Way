@@ -9,3 +9,4 @@
 /Library/*
 !/Library/.gitkeep
 /*/Application/scripts/Textures.txt
+/Common/include/ComptrIKD.h

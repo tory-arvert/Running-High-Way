@@ -2,8 +2,24 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Running High Way", "Running High Way\Running High Way.vcxproj", "{1F9FAF08-B63D-4B18-B67C-6BE1887E7B19}"
+	ProjectSection(ProjectDependencies) = postProject
+		{04FD4D6E-A254-4D03-AD55-5B803227718D} = {04FD4D6E-A254-4D03-AD55-5B803227718D}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameLib", "GameLib\GameLib.vcxproj", "{04FD4D6E-A254-4D03-AD55-5B803227718D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{EE60BB8D-0F0C-4683-9289-941AF2A9D5BE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Include", "Include", "{9F789DDA-A551-4DA7-A8D1-9F1FD9D60712}"
+	ProjectSection(SolutionItems) = preProject
+		Common\Include\Common.h = Common\Include\Common.h
+		Common\Include\Comptr.hpp = Common\Include\Comptr.hpp
+		Common\Include\MemoryLeakCheck.h = Common\Include\MemoryLeakCheck.h
+		Common\Include\SafeDelete.h = Common\Include\SafeDelete.h
+		Common\Include\tfstream.h = Common\Include\tfstream.h
+		Common\Include\tiostream.h = Common\Include\tiostream.h
+		Common\Include\tsstream.h = Common\Include\tsstream.h
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,5 +38,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9F789DDA-A551-4DA7-A8D1-9F1FD9D60712} = {EE60BB8D-0F0C-4683-9289-941AF2A9D5BE}
 	EndGlobalSection
 EndGlobal
