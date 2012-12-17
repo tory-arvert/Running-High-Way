@@ -2,21 +2,18 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Framework.cpp" />
-    <ClCompile Include="Window\Window.cpp">
-      <Filter>Window</Filter>
-    </ClCompile>
     <ClCompile Include="include\Vector2.cpp">
       <Filter>include</Filter>
     </ClCompile>
     <ClCompile Include="include\Vector3.cpp">
       <Filter>include</Filter>
     </ClCompile>
+    <ClCompile Include="Window\WindowCreator.cpp">
+      <Filter>Window</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework.h" />
-    <ClInclude Include="Window\Window.h">
-      <Filter>Window</Filter>
-    </ClInclude>
     <ClInclude Include="include\vector2.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -31,6 +28,12 @@
     </ClInclude>
     <ClInclude Include="include\Vector3Impl.hpp">
       <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="Window\WindowCreator.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Window\WindowCreatorImpl.hpp">
+      <Filter>Window</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
