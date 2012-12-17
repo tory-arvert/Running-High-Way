@@ -20,147 +20,170 @@
 #ifndef INCLUDED_GAMELIB_BASE_CLASS_H
 #define INCLUDED_GAMELIB_BASE_CLASS_H
 
-//#include <memory>       // shared_ptr用
+    /// @brief Width, Height のメンバ変数を持つクラス
+    template <class T>
+    class BaseWH{
+    protected:
+        T mWidth, mHeight;
+    public:
+        BaseWH(): mWidth(), mHeight(){};  // 初期化子を使うことでその型のデフォルトコンストラクタ使用
+        BaseWH(const T a_width, const T a_height): mWidth(a_width), mHeight(a_height){};
+        ~BaseWH(){};
 
-using namespace std;
+        void setWidth(const T a_width){ mWidth = a_width;}
+        void setHeight(const T a_height){ mHeight = a_height;}
+        void setWH(const BaseWH<T>& wh){
+            mWidth = wh.width();
+            mHeight = wh.height();
+        }
+        void setWH(const T a_width, const T a_height){
+            mWidth = a_width;
+            mHeight = a_height;
+        }
 
-namespace GameLib{
+        const T width()const{ return mWidth;}
+        const T height()const{ return mHeight;}
+    };
 
-    namespace Graphics{
+    /// @brief Left, Top のメンバ変数を持つクラス
+    template <class T>
+    class BaseLT{
+    protected:
+        T mLeft, mTop;
+    public:
+        BaseLT(): mLeft(), mTop(){};  // 初期化子を使うことでその型のデフォルトコンストラクタ使用
+        BaseLT(const T a_left, const T a_top): mLeft(a_left), mTop(a_top){};
+        ~BaseLT(){};
 
-        template <class T>
-        /// @brief Width,Heightのメンバ変数を持つクラス
-        class WH<T>{
-        protected:
-            T mWidth, mHeight;
-            WH(): mWidth(), mHeight(){};  // 初期化子を使うことでその型のデフォルトコンストラクタ使用
-            WH(const T width, const T height): mWidth(width), mHeight(height){};
-            ~WH(){};
+        void setLeft(const T a_left){ mLeft = a_left;}
+        void setTop(const T a_top){ mTop = a_top;}
+        void setLT(const BaseLT<T>& lt){
+            mLeft = lt.left();
+            mTop = lt.top();
+        }
+        void setLT(const T a_left, const T a_top){
+            mLeft = a_left;
+            mTop = a_top;
+        }
 
-            T setWidth(const T Width){ mWidth = width;}
-            T setHeight(const T height){ mHeight = height;}
-            T setWH(const WH<T> wh){
-                mWidth = wh.width();
-                mHeight = wh.height();
-            }
 
-            const T width()const{ return mWidth;}
-            const T height()const{ return mHeight;}
-        ;
+        const T left()const{ return mLeft;}
+        const T top()const{ return mTop;}
+    };
 
-        template <class T>
-        /// @brief Left,Topのメンバ変数を持つクラス
-        class LT<T>{
-        protected:
-            T mLeft, mTop;
-            LT(): mLeft(), mTop(){};  // 初期化子を使うことでその型のデフォルトコンストラクタ使用
-            LT(const T left, const T top): mLeft(left), mTop(top){};
-            ~LT(){};
+    /// @brief Left, Top, Width, Height のメンバ変数を持つクラス
+    template <class T>
+    class BaseUV{
+    protected:
+        T mLeft, mTop, mWidth, mHeight;
+    public:
+        BaseUV(): mLeft(), mTop(), mWidth(), mHeight(){};  // 初期化子を使うことでその型のデフォルトコンストラクタ使用
+        BaseUV(const T a_left, const T a_top, const T a_width, const T a_height)
+            : mLeft(a_left)
+            , mTop(a_top)
+            , mWidth(a_width)
+            , mHeight(a_height)
+        {};
+        BaseUV(const BaseUV<T>& uv)
+            : mLeft( uv.left() )
+            , mTop( uv.top() )
+            , mWidth( uv.width() )
+            , mHeight( uv.height() )
+        {};
+        ~BaseUV(){};
 
-            T setLeft(const T left){ mLeft = left;}
-            T setTop(const T top){ mTop = top;}
+        void setLeft(const T a_left){ mLeft = a_left;}
+        void setTop(const T a_top){ mTop = a_top;}
+        void setWidth(const T a_width){ mWidth = a_width;}
+        void setHeight(const T a_height){ mHeight = a_height;}
+        void setUV(const BaseUV<T>& uv){
+            mLeft = uv.left();
+            mTop = uv.top();
+            mWidth = uv.width();
+            mHeight = uv.height();
+        }
+        void setUV(const T a_left, const T a_top, const T a_width, const T a_height){
+            mLeft = a_left;
+            mTop = a_top;
+            mWidth = a_width;
+            mHeight = a_height;
+        }
 
-            const T left()const{ return mLeft;}
-            const T top()const{ return mTop;}
-        };
-
-        template <class T>
-        /// @brief left, top, right. bottomのメンバ変数を持つクラス
-        class UV<T>{
-        protected:
-            T mLeft, mTop, mWidth, mHeight;
-            UV(): mLeft(), mTop(), mWidth(), mHeight(){};  // 初期化子を使うことでその型のデフォルトコンストラクタ使用
-            UV(const T left, const T top, const T width, const T height)
-                : mLeft(left)
-                , mTop(top)
-                , mWidth(width)
-                , mHeight(height)
-            {};
-            UV(const UV<T> uv)
-                : mLeft( uv.left() )
-                , mTop( uv.top() )
-                , mWidth( uv.width() )
-                , mHeight( uv.height() )
-            {};
-            ~UV(){};
-
-            T setLeft(const T left){ mLeft = left;}
-            T setTop(const T top){ mTop = top;}
-            T setWidth(const T Width){ mWidth = width;}
-            T setHeight(const T height){ mHeight = height;}
-            T setUV(const UV<T> uv){
-                mLeft = uv.left();
-                mTop = uv.top();
-                mWidth = uv.width();
-                mHeight = uv.height();
-            }
-
-            const T left()const{ return mLeft;}
-            const T top()const{ return mTop;}
-            const T width()const{ return mWidth;}
-            const T height()const{ return mHeight;}
-        };
+        const T left()const{ return mLeft;}
+        const T top()const{ return mTop;}
+        const T width()const{ return mWidth;}
+        const T height()const{ return mHeight;}
+    };
 
         
-        template <class T>
-        /// @brief left, top, right. bottomのメンバ変数を持つクラス
-        class Rect<T>{
-        protected:
-            T mLeft, mTop, mRight, mBottom;
-            LT(): mLeft(), mTop(), mRight(), mBottom(){};  // 初期化子を使うことでその型のデフォルトコンストラクタ使用
-            LT(const T left, const T top, const T right, const T bottom)
-                : mLeft(left)
-                , mTop(top)
-                , mRight(right)
-                , mBottom(bottom)
-            {};
-            LT(const Rect<T> rect)
-                : mLeft( rect.left() )
-                , mTop( rect.top() )
-                , mRight( rect.right() )
-                , mBottom( rect.bottom() )
-            {};
-            ~LT(){};
+    /// @brief Left, Top, Right. Bottomのメンバ変数を持つクラス
+    template <class T>
+    class BaseRect{
+    protected:
+        T mLeft, mTop, mRight, mBottom;
+    public:
+        BaseRect(): mLeft(), mTop(), mRight(), mBottom(){};  // 初期化子を使うことでその型のデフォルトコンストラクタ使用
+        BaseRect(const T a_left, const T a_top, const T a_right, const T a_bottom)
+            : mLeft(a_left)
+            , mTop(a_top)
+            , mRight(a_right)
+            , mBottom(a_bottom)
+        {};
+        BaseRect(const BaseRect<T>& rect)
+            : mLeft( rect.left() )
+            , mTop( rect.top() )
+            , mRight( rect.right() )
+            , mBottom( rect.bottom() )
+        {};
+        ~BaseRect(){};
 
-            T setLeft(const T left){ mLeft = left;}
-            T setTop(const T top){ mTop = top;}
-            T setRight(const T right){ mRight = right;}
-            T setBottom(const T bottom){ mBottom = bottom;}
-            T setRect(const Rect<T> rect){
-                mLeft = rect.left();
-                mTop = rect.top();
-                mRight = rect.right();
-                mBottom = rect.bottom();
-            }
+        void setLeft(const T a_left){ mLeft = a_left;}
+        void setTop(const T a_top){ mTop = a_top;}
+        void setRight(const T a_right){ mRight = a_right;}
+        void setBottom(const T a_bottom){ mBottom = a_bottom;}
+        void setRect(const BaseRect<T>& rect){
+            mLeft = rect.left();
+            mTop = rect.top();
+            mRight = rect.right();
+            mBottom = rect.bottom();
+        }
+        void setRect(const T a_left, const T a_top, const T a_right, const T a_bottom){
+            mLeft = a_left;
+            mTop = a_top;
+            mRight = a_right;
+            mBottom = a_bottom;
+        }
 
-            const T left()const{ return mLeft;}
-            const T top()const{ return mTop;}
-            const T right()const{ return mRight;}
-            const T bottom()const{ return mBottom;}
-        };
+        const T left()const{ return mLeft;}
+        const T top()const{ return mTop;}
+        const T right()const{ return mRight;}
+        const T bottom()const{ return mBottom;}
+    };
 
-        template <class T>
-        /// @brief xyのメンバ変数を持つクラス
-        class XY<T>{
-        protected:
-            T mx, my;
-            XY(): mx(),my(){};  // 初期化子を使うことでその型のデフォルトコンストラクタ使用
-            XY(const T x, const T y): mx(x), my(y){};
-            ~XY(){};
+    /// @brief xyのメンバ変数を持つクラス
+    template <class T>
+    class BaseXY{
+    protected:
+        T mx, my;
+    public:
+        BaseXY(): mx(),my(){};  // 初期化子を使うことでその型のデフォルトコンストラクタ使用
+        BaseXY(const T a_x, const T a_y): mx(a_x), my(a_y){};
+        ~BaseXY(){};
 
-            T setX(const T x){ mx = x;}
-            T setY(const T y){ my = y;}
-            T setXY(const XY<T> xy){
-                mx = xy.x();
-                my = xy.y();
-            }
+        void setX(const T a_x){ mx = a_x;}
+        void setY(const T a_y){ my = a_y;}
+        void setXY(const BaseXY<T>& xy){
+            mx = xy.x();
+            my = xy.y();
+        }
+        void setXY(const T a_x, const T a_y){
+            mx = a_x;
+            my = a_y;
+        }
 
-            const T x()const{ return mx;}
-            const T y()const{ return my;}
+        const T x()const{ return mx;}
+        const T y()const{ return my;}
 
-        };
-
-    }  // end of namespace Graphics
-} // end of namespace GameLib
+    };
 
 #endif
