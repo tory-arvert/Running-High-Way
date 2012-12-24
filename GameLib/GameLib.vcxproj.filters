@@ -11,6 +11,9 @@
     <ClCompile Include="Window\WindowCreator.cpp">
       <Filter>Window</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\GraphicsManager.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework.h" />
@@ -34,6 +37,18 @@
     </ClInclude>
     <ClInclude Include="Window\WindowCreatorImpl.hpp">
       <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Color.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\GraphicsManager.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\GraphicsManagerImplDirect3D.hpp">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\IGraphicsManagerImpl.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

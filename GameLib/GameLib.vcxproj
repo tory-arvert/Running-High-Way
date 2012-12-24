@@ -48,6 +48,13 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>$(DXSDK_DIR)\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d9.lib;d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -64,12 +71,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Framework.cpp" />
+    <ClCompile Include="Graphics\GraphicsManager.cpp" />
     <ClCompile Include="include\Vector2.cpp" />
     <ClCompile Include="include\Vector3.cpp" />
     <ClCompile Include="Window\WindowCreator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework.h" />
+    <ClInclude Include="Graphics\GraphicsManager.h" />
+    <ClInclude Include="Graphics\GraphicsManagerImplDirect3D.hpp" />
+    <ClInclude Include="Graphics\IGraphicsManagerImpl.h" />
+    <ClInclude Include="include\Color.h" />
     <ClInclude Include="include\TemplateBaseClass.h" />
     <ClInclude Include="include\vector2.h" />
     <ClInclude Include="include\Vector2Impl.hpp" />
