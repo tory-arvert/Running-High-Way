@@ -39,7 +39,7 @@ namespace GameLib
             Framework();
 
             /// @brief デストラクタ
-            virtual ~Framework();
+            ~Framework();
 
             //----------------------------------------------------------
             // メンバ関数

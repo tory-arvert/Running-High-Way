@@ -22,14 +22,16 @@
 #include <Windows.h>
 #include <tsstream.h>
 
-#include "GameLib/Window/Window.h"
+#include "GameLib/Window/WindowCreator.h"
 #include "GameLib/Framework.h"
+
+#include "GameLib/Graphics/GraphicsManager.h"
+
 
 using namespace std;
 using namespace GameLib::Window;
 
 #include <MemoryLeakCheck.h>
-
 
 /// @brief メインメソッド、全ての始まり
 /// @param 
@@ -51,15 +53,31 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPInst, LPSTR lpCmd, int nCmd){
 
 
     unsigned int frame = 0;
-    while( !w.CheckEndRequested() ){
+    while( !w.isEndRequested() ){
 
         w.Update();
         ++frame;
 
-        Sleep(5);
+        Sleep(1);
+
+        /*
+        if(frame == 180){
+            GameLib::Graphics::GraphicsManager gm;
+            gm.setFullScreen( true );
+            gm.RecreateDevice();
+        }
+
+        
+        if(frame == 300){
+            GameLib::Graphics::GraphicsManager gm;
+            w.EnableFullScreen( false );
+            gm.setFullScreen( false );
+            gm.RecreateDevice();
+        }
+        */
 
         tstringstream oss;
-        oss << int(frame/60) << ":" << frame;
+        oss << int(frame/60) << ":" << frame << (w.isMinimized()? "最小化中":"最小化じゃないよ");
         w.SetTitle( oss.str() );
         
     }

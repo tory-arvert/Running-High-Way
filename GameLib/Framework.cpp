@@ -24,14 +24,14 @@
 #include <tchar.h>      // _T("")に必要
 
 #include "Framework.h"
-#include "Window/Window.h"
-//#include "Graphics/GraphicsManager.h"
+#include "Window/WindowCreator.h"
+#include "Graphics/GraphicsManager.h"
 //#include "FileIO/FileIOManager.h"
 
 
 using namespace std;
 using namespace GameLib::Window;
-
+using namespace GameLib::Graphics;
 
 // 無名ネームスペース定義
 namespace{
@@ -46,10 +46,10 @@ namespace{
     public:     // 特殊メンバ
 
         /// @brief コンストラクタ
-        Impl(){};
+        Impl(){}
 
         /// @brief デストラクタ
-        virtual ~Impl(){};       
+        virtual ~Impl(){}  
 
     };
 
@@ -100,9 +100,13 @@ namespace GameLib{
         w.Create();
         w.SetWidth( 1024 );
         w.SetHeight( 768 );
-        w.SetTitle( _T("Library Test") );              
+        w.SetTitle( _T("Library Test") );
+        w.EnableFullScreen(false);
         w.Show();
 
+        GraphicsManager gm;
+
+        gm.Create(w.handle(), 1024, 768, false, false, false);
 
     }
 
