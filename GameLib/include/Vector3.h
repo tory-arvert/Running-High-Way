@@ -36,6 +36,9 @@ namespace GameLib{
             /// @brief Vevtor3実装クラス
             class Impl;
 
+            //----------------------------------------------------------
+            // 別名宣言
+
             /// @brief Vector3Implのshared_ptrの別名
             typedef shared_ptr < Impl > Vector3Impl_sp;
 
@@ -70,6 +73,8 @@ namespace GameLib{
             //----------------------------------------------------------
             // メンバ関数
         public:
+            //----------------------------------------
+            // アクセサ
             
             /// @brief 要素Xを設定します。
             void setX(const float x);
@@ -81,7 +86,6 @@ namespace GameLib{
             void setZ(const float z);
 
             //----------------------------------------
-            // プロパティ
 
             /// @brief 要素Xを取得します。
             const float x() const;
@@ -92,7 +96,7 @@ namespace GameLib{
             /// @brief 要素Zを取得します。
             const float z() const;
           
-        };
+        }; // end of class Vector3
 
 
     }   // end of namespace Graphics

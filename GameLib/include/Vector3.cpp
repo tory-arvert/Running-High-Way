@@ -91,7 +91,7 @@ namespace GameLib{
         /// @brief —v‘fZ‚ðŽæ“¾‚µ‚Ü‚·B
         const float Vector3::z() const{
             return this->mImpl->z();
-        };
+        }
 
 
     }   // end of namespace Graphics

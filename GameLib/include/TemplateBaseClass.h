@@ -26,9 +26,9 @@
     protected:
         T mWidth, mHeight;
     public:
-        BaseWH(): mWidth(), mHeight(){};  // 初期化子を使うことでその型のデフォルトコンストラクタ使用
-        BaseWH(const T a_width, const T a_height): mWidth(a_width), mHeight(a_height){};
-        ~BaseWH(){};
+        BaseWH(): mWidth(), mHeight(){}  // 初期化子を使うことでその型のデフォルトコンストラクタ使用
+        BaseWH(const T a_width, const T a_height): mWidth(a_width), mHeight(a_height){}
+        virtual ~BaseWH(){}
 
         void setWidth(const T a_width){ mWidth = a_width;}
         void setHeight(const T a_height){ mHeight = a_height;}
@@ -51,9 +51,9 @@
     protected:
         T mLeft, mTop;
     public:
-        BaseLT(): mLeft(), mTop(){};  // 初期化子を使うことでその型のデフォルトコンストラクタ使用
-        BaseLT(const T a_left, const T a_top): mLeft(a_left), mTop(a_top){};
-        ~BaseLT(){};
+        BaseLT(): mLeft(), mTop(){}  // 初期化子を使うことでその型のデフォルトコンストラクタ使用
+        BaseLT(const T a_left, const T a_top): mLeft(a_left), mTop(a_top){}
+        virtual ~BaseLT(){}
 
         void setLeft(const T a_left){ mLeft = a_left;}
         void setTop(const T a_top){ mTop = a_top;}
@@ -77,20 +77,20 @@
     protected:
         T mLeft, mTop, mWidth, mHeight;
     public:
-        BaseUV(): mLeft(), mTop(), mWidth(), mHeight(){};  // 初期化子を使うことでその型のデフォルトコンストラクタ使用
+        BaseUV(): mLeft(), mTop(), mWidth(), mHeight(){}   // 初期化子を使うことでその型のデフォルトコンストラクタ使用
         BaseUV(const T a_left, const T a_top, const T a_width, const T a_height)
             : mLeft(a_left)
             , mTop(a_top)
             , mWidth(a_width)
             , mHeight(a_height)
-        {};
+        {}
         BaseUV(const BaseUV<T>& uv)
             : mLeft( uv.left() )
             , mTop( uv.top() )
             , mWidth( uv.width() )
             , mHeight( uv.height() )
-        {};
-        ~BaseUV(){};
+        {}
+        virtual ~BaseUV(){}
 
         void setLeft(const T a_left){ mLeft = a_left;}
         void setTop(const T a_top){ mTop = a_top;}
@@ -122,20 +122,20 @@
     protected:
         T mLeft, mTop, mRight, mBottom;
     public:
-        BaseRect(): mLeft(), mTop(), mRight(), mBottom(){};  // 初期化子を使うことでその型のデフォルトコンストラクタ使用
+        BaseRect(): mLeft(), mTop(), mRight(), mBottom(){}   // 初期化子を使うことでその型のデフォルトコンストラクタ使用
         BaseRect(const T a_left, const T a_top, const T a_right, const T a_bottom)
             : mLeft(a_left)
             , mTop(a_top)
             , mRight(a_right)
             , mBottom(a_bottom)
-        {};
+        {}
         BaseRect(const BaseRect<T>& rect)
             : mLeft( rect.left() )
             , mTop( rect.top() )
             , mRight( rect.right() )
             , mBottom( rect.bottom() )
-        {};
-        ~BaseRect(){};
+        {}
+        virtual ~BaseRect(){}
 
         void setLeft(const T a_left){ mLeft = a_left;}
         void setTop(const T a_top){ mTop = a_top;}
@@ -166,9 +166,9 @@
     protected:
         T mx, my;
     public:
-        BaseXY(): mx(),my(){};  // 初期化子を使うことでその型のデフォルトコンストラクタ使用
-        BaseXY(const T a_x, const T a_y): mx(a_x), my(a_y){};
-        ~BaseXY(){};
+        BaseXY(): mx(),my(){}   // 初期化子を使うことでその型のデフォルトコンストラクタ使用
+        BaseXY(const T a_x, const T a_y): mx(a_x), my(a_y){}
+        virtual ~BaseXY(){}
 
         void setX(const T a_x){ mx = a_x;}
         void setY(const T a_y){ my = a_y;}

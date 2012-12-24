@@ -27,27 +27,27 @@
     protected:
         T mAlpha, mRed, mGreen, mBlue;
     public:
-        Color4(): mAlpha(255), mRed(), mGreen(), mBlue(){};  // 初期化子を使うことでその型のデフォルトコンストラクタ使用
+        Color4(): mAlpha(255), mRed(), mGreen(), mBlue(){}   // 初期化子を使うことでその型のデフォルトコンストラクタ使用
         Color4(const T a_alpha, const T a_red, const T a_green, const T a_blue)
             : mAlpha(a_alpha)
             , mRed(a_red)
             , mGreen(a_green)
             , mBlue(a_blue)
-        {};
+        {}
         Color4(const Color4<T>& color)
             : mAlpha( color.a() )
             , mRed( color.r() )
             , mGreen( color.g() )
             , mBlue( color.b() )
-        {};
+        {}
         Color4(const Color3<T>& color)
             : mAlpha( 255 )
             , mRed( color.r() )
             , mGreen( color.g() )
             , mBlue( color.b() )
-        {};
+        {}
 
-        ~Color4(){};
+        virtual ~Color4(){}
 
         void setA(const T a_alpha){ mAlpha = a_alpha;}
         void setR(const T a_red){ mRed = a_red;}
@@ -94,24 +94,24 @@
     protected:
         T mRed, mGreen, mBlue;
     public:
-        Color3(): mRed(), mGreen(), mBlue(){};  // 初期化子を使うことでその型のデフォルトコンストラクタ使用
+        Color3(): mRed(), mGreen(), mBlue(){}  // 初期化子を使うことでその型のデフォルトコンストラクタ使用
         Color3(const T a_red, const T a_green, const T a_blue)
             : mRed(a_red)
             , mGreen(a_green)
             , mBlue(a_blue)
-        {};
+        {}
         Color3(const Color3<T>& color)
             : mRed( color.r() )
             , mGreen( color.g() )
             , mBlue( color.b() )
-        {};
+        {}
         Color3(const Color4<T>& color)
             : mRed( color.r() )
             , mGreen( color.g() )
             , mBlue( color.b() )
-        {};
+        {}
 
-        ~Color3(){};
+        virtual ~Color3(){}
 
         void setR(const T a_red){ mRed = a_red;}
         void setG(const T a_green){ mGreen = a_green;}

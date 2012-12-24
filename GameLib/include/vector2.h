@@ -36,6 +36,9 @@ namespace GameLib{
         /// @brief Vevtor2実装クラス
         class Impl;
 
+        //----------------------------------------------------------
+        // 別名宣言
+
         /// @brief Vector2Implのshared_ptrの別名
         typedef shared_ptr < Impl > Vector2Impl_sp;
         
@@ -72,16 +75,16 @@ namespace GameLib{
         //----------------------------------------------------------
         // メンバ関数
         public:
+        //----------------------------------------
+        // アクセサ
             
         /// @brief 要素Xを設定します。
         void setX(const float x);
-
 
         /// @brief 要素Yを設定します。
         void setY(const float y);
 
         //----------------------------------------
-        // プロパティ
 
         /// @brief 要素Xを取得します。
         const float x() const;
