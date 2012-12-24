@@ -1,12 +1,12 @@
 /// @file Window.cpp
-/// @brief ウィンドウを作成する処理クラス - 実装
+/// @brief ウィンドウを作成する処理クラス - Implリダイレクト
 /// @note 
 /// @date 2011/09/01     tory
 
 //====================================================================
 //              Window.cpp
 //--------------------------------------------------------------------
-//    処理内容 : ウィンドウを作成する処理 - 実装
+//    処理内容 : ウィンドウを作成する処理 - Implリダイレクト
 //    処理内容 : 
 //    作成詳細 : 2011/09/01
 //    補足     : 
@@ -112,9 +112,9 @@ namespace GameLib{
         }
 
 
-        /// @brief フルスクリーンモードの指定
-        /// @brief フルスクリーンにする場合はtrueを指定する
-        void WindowCreator::FlagFullScreen( bool flag ) const{
+        /// @brief スクリーンモードを切り替えます。
+        /// @brief フルスクリーンにする場合はtrueを、ウィンドウにする場合はfalseを指定します。
+        void WindowCreator::EnableFullScreen( bool flag ) const{
             gImpl->EnableFullScreen( flag );
         }
 
@@ -169,7 +169,7 @@ namespace GameLib{
         }
 
         //----------------------------------------------------------
-        // プロパティ
+        
 
         /// @brief ウィンドウハンドルを取得する。
         /// @return HWND ウィンドウハンドル

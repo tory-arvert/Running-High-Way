@@ -76,20 +76,23 @@ namespace GameLib{
         public:
 
             /// @brief コンストラクタ
-            WindowStatesFlag::WindowStatesFlag():
+            WindowStatesFlag():
                 mActive( false ),
                 mFullScreen( false ),
                 mMinimized( false ),
                 mReady( false ),
                 mEndRequested( false )            
-            {};
+            {}
         
             /// @brief デストラクタ
-            WindowStatesFlag::~WindowStatesFlag(){};
+            ~WindowStatesFlag(){}
 
             //----------------------------------------------------------
             // メンバ関数
         public:
+
+            //----------------------------------------
+            // アクセサ
 
             /// @brief アクティブ状態をセットします
             void setActive(const bool a_flag){
@@ -116,9 +119,7 @@ namespace GameLib{
                 mReady = a_flag;
             }
 
-            //----------------------------------------------------------
-            // プロパティ
-        public:
+            //----------------------------------------
 
             /// @brief ウィンドウのアクティブ状態のフラグ値を返します。
             const bool active() const{return mActive;}
@@ -164,14 +165,17 @@ namespace GameLib{
                 mIconID( 0 ),
                 mHandle( NULL ),
                 mStyle( 0x0000 )
-            {};
+            {}
 
             /// @brief デストラクタ
-            ~WindowInfo(){};
+            ~WindowInfo(){}
 
             //----------------------------------------------------------
             // メンバ変数
         public:
+
+            //----------------------------------------
+            // アクセサ
 
             /// @brief タイトル情報を設定します。
             void setTitle(const tstring a_title){
@@ -199,9 +203,7 @@ namespace GameLib{
             }
 
 
-            //----------------------------------------------------------
-            // プロパティ
-        public:
+            //----------------------------------------
 
             /// @brief タイトル名を取得します。
             const tstring title() const{return mTitle;}
@@ -226,8 +228,6 @@ namespace GameLib{
         /// @class WindowCreator
         /// @brief WindowCreator実装クラス
         class WindowCreatorImpl{
-            //----------------------------------------------------------
-            // プロトタイプ宣言
 
             //----------------------------------------------------------
             // メンバ変数
@@ -251,10 +251,10 @@ namespace GameLib{
                 mWindowSize(),
                 mPosition(),
                 mStatesFlag()
-            {};
+            {}
 
             /// @brief デストラクタ
-            ~WindowCreatorImpl(){};
+            ~WindowCreatorImpl(){}
 
             //----------------------------------------------------------
             // メンバ関数
@@ -294,6 +294,8 @@ namespace GameLib{
                 // GetStartupInfoで正常にshowCmd値が取得できないので
                 // 別の方法でshowCmd値を取得しています。
                 WINDOWPLACEMENT info;
+                ZeroMemory(&info, sizeof(info));
+
                 info.length = sizeof(WINDOWPLACEMENT);
                 GetWindowPlacement( mWindowInfo.handle(), &info );
                 
@@ -424,6 +426,9 @@ namespace GameLib{
                 return DefWindowProc( hWnd, msg, wParam, lParam );
             }
 
+            //----------------------------------------
+            // アクセサ
+
             /// @brief 描画領域サイズのwidthを設定します。
             void setClientWidth(const int a_width){
                 mClientSize.setWidth( a_width );
@@ -444,10 +449,7 @@ namespace GameLib{
                 mWindowInfo.setIconID( a_id );
             }
 
-
-            //----------------------------------------------------------
-            // プロパティ
-        public:
+            //----------------------------------------
 
             /// @brief 描画領域サイズのwidthを設定します。
             const int clientWidth(){
@@ -632,6 +634,7 @@ namespace GameLib{
             /// @brief 現在のウィンドウの最小化の状態をフラグ値に設定します。
             void CheckMinimized(){
                 WINDOWPLACEMENT info;
+                ZeroMemory(&info, sizeof(info));
                 info.length = sizeof(WINDOWPLACEMENT);
                 GetWindowPlacement( mWindowInfo.handle(), &info );
 
@@ -648,8 +651,8 @@ namespace GameLib{
                     mStatesFlag.setMinimized( false );
                     break;
 
-                default:        // その他の処理(エラー時などは終了する)
-                    EndRequest();
+                default:        // その他の時は特に何もしない
+                    break;
                 }
             }
 

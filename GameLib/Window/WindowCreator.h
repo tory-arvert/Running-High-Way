@@ -65,9 +65,9 @@ namespace GameLib{
             /// @brief プログラムの終了を行います。
             void End() const;
 
-            /// @brief フルスクリーンモードの設定をします。
-            /// フルスクリーンにする場合はtrue指定にします。
-            void FlagFullScreen( bool flag ) const;
+            /// @brief スクリーンモードを切り替えます。
+            /// @brief フルスクリーンにする場合はtrueを、ウィンドウにする場合はfalseを指定します。
+            void EnableFullScreen( bool flag ) const;
 
             //----------------------------------------------------------           
             // アクセサ
@@ -89,8 +89,7 @@ namespace GameLib{
             /// @param id アイコンのリソースID
             void SetIcon( const int id );
 
-            //----------------------------------------------------------
-            // プロパティ
+            //----------------------------------------
 
             /// @brief ウィンドウハンドルを取得します。
             /// @return HWND ウィンドウハンドル
