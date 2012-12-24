@@ -19,8 +19,6 @@
 #ifndef INCLUDED_COMMON_COMPTR_H
 #define INCLUDED_COMMON_COMPTR_H
 
-#include <windows.h>
-
 
 /// @brief DirectXのCOMインターフェイス用の共有ポインタ
 template< class T >
@@ -209,7 +207,7 @@ public:
     /// @brief インターフェイス代入演算子(新規インターフェイス登録)
     /// @param ptr 登録するインターフェイスへのポインタ
     /// @note 明示的にインターフェイスを登録したい場合に用います
-    template< T2 >
+    template< class T2 >
     void operator =( T2* ptr ){
 
         // 保持するインターフェイスの参照カウンタを1つ減らす
@@ -243,7 +241,7 @@ public:
 
     /// @brief != 比較演算子
     /// @param src 比較元のCom_ptr
-    bool operator !=( com_ptr< T >& src ){
+    bool operator !=( Com_ptr< T >& src ){
         return ( *mppInterface != *( src.mppInterface ) ? true : false );
     }
 
@@ -262,7 +260,7 @@ public:
 
     /// @brief == 比較演算子
     /// @param src 比較元のCom_ptr
-    bool operator ==( com_ptr< T >& src ){
+    bool operator ==( Com_ptr< T >& src ){
         return ( *mppInterface != *( src.mppInterface ) ? true : false );
     }
     
@@ -304,7 +302,7 @@ public:
     T** ToCreator(){
         // 保持するインターフェイスの参照カウンタを減らす
         if( *mppInterface ){
-            Release( *m_ppInterface );
+            Release( *mppInterface );
         }
 
         // 自らは新しく作成されるため参照カウンタを減らす
