@@ -86,10 +86,10 @@
     <ClInclude Include="Graphics\Sprite.h" />
     <ClInclude Include="Graphics\SpriteImpl.hpp" />
     <ClInclude Include="Graphics\SpriteImplShader.hpp" />
-    <ClInclude Include="include\Color.h" />
-    <ClInclude Include="include\ImageBase.h" />
-    <ClInclude Include="include\TemplateBaseClass.h" />
-    <ClInclude Include="include\Transform2D.h" />
+    <ClInclude Include="include\Color.hpp" />
+    <ClInclude Include="include\ImageBase.hpp" />
+    <ClInclude Include="include\TemplateBaseClass.hpp" />
+    <ClInclude Include="include\Transform2D.hpp" />
     <ClInclude Include="include\vector2.h" />
     <ClInclude Include="include\Vector2Impl.hpp" />
     <ClInclude Include="include\Vector3.h" />

@@ -1,10 +1,10 @@
-/// @file TemplateBaseClass.h
+/// @file TemplateBaseClass.hpp
 /// @brief 使用頻度の高いテンプレート用クラスの定義
 /// @brief WH(Width,Height) XY(x,y)などのテンプレート用の汎用クラス
 /// @note 
 /// @date 2012/12/12     tory
 //====================================================================
-//            TemplateBaseClass.h
+//            TemplateBaseClass.hpp
 //--------------------------------------------------------------------
 //    処理内容 : 使用頻度の高いテンプレート用クラスの定義
 //    処理内容 : WH(Width,Height) XY(x,y)などのテンプレート用の汎用クラス

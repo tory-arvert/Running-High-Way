@@ -26,9 +26,6 @@
     <ClInclude Include="include\Vector2Impl.hpp">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\TemplateBaseClass.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="include\Vector3.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -40,9 +37,6 @@
     </ClInclude>
     <ClInclude Include="Window\WindowCreatorImpl.hpp">
       <Filter>Window</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Color.h">
-      <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\GraphicsManager.h">
       <Filter>Graphics</Filter>
@@ -65,10 +59,16 @@
     <ClInclude Include="Graphics\ISpriteImpl.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="include\Transform2D.h">
+    <ClInclude Include="include\ImageBase.hpp">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\ImageBase.h">
+    <ClInclude Include="include\Color.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Transform2D.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TemplateBaseClass.hpp">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

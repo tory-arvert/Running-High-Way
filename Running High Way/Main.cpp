@@ -27,6 +27,12 @@
 
 #include "GameLib/Graphics/GraphicsManager.h"
 
+// 以下テスト用
+#include <Comptr.hpp>
+#include "GameLib/Graphics/Sprite.h"
+#include <d3d9.h>
+
+
 
 using namespace std;
 using namespace GameLib::Window;
@@ -51,6 +57,14 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPInst, LPSTR lpCmd, int nCmd){
     // フレームワークを作成、初期化
     framework.Create();
 
+    
+    
+    
+    GameLib::Graphics::Sprite sp;    
+    sp.testTex();
+    sp.Position(0,0);
+    sp.Alpha(255);
+    sp.UV(0.0f,0.0f,1.0f,1.0f);
 
     unsigned int frame = 0;
     while( !w.isEndRequested() ){
@@ -59,6 +73,10 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPInst, LPSTR lpCmd, int nCmd){
         ++frame;
 
         Sleep(1);
+
+        sp.Draw();
+        sp.DrawALL();
+        
 
         /*
         if(frame == 180){

@@ -1,9 +1,9 @@
-/// @file ImageBase.h
+/// @file ImageBase.hpp
 /// @brief テクスチャ関連のまとめクラス
 /// @note 
 /// @date 2012/12/29     tory
 //====================================================================
-//            ImageBase.h
+//            ImageBase.hpp
 //--------------------------------------------------------------------
 //    処理内容 : テクスチャ関連のまとめクラス
 //    処理内容 : 
@@ -18,7 +18,7 @@
 #ifndef INCLUDED_GAMELIB_GRAPHICS_IMAGEBASE_H
 #define INCLUDED_GAMELIB_GRAPHICS_IMAGEBASE_H
 
-#include "TemplateBaseClass.h"
+#include "TemplateBaseClass.hpp"
 #include <Comptr.hpp>
 #include <d3d9.h>               // Texture実体用
 

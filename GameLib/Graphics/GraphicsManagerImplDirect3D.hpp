@@ -25,7 +25,7 @@
 
 #include "IGraphicsManagerImpl.h"
 #include <tiostream.h>          // tstringŒ^‚È‚Ç‚ÌTCHARŠg’£’è‹`
-#include "TemplateBaseClass.h"
+#include "TemplateBaseClass.hpp"
 #include "Comptr.hpp"
 
 #include "ISpriteImpl.h"

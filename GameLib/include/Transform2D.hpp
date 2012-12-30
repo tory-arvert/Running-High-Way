@@ -1,9 +1,9 @@
-/// @file Transform2D.h
+/// @file Transform2D.hpp
 /// @brief 座標・拡大値・回転をまとめた2D用トランスフォームクラス
 /// @note 
 /// @date 2012/12/29     tory
 //====================================================================
-//            Transform2D.h
+//            Transform2D.hpp
 //--------------------------------------------------------------------
 //    処理内容 : 座標・拡大値・回転をまとめた2D用トランスフォームクラス
 //    処理内容 : 
@@ -18,7 +18,7 @@
 #ifndef INCLUDED_GAMELIB_GRAPHICS_TRANSFORM2D_H
 #define INCLUDED_GAMELIB_GRAPHICS_TRANSFORM2D_H
 
-#include "TemplateBaseClass.h"
+#include "TemplateBaseClass.hpp"
 
 namespace GameLib{
     namespace Graphics{

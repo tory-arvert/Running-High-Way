@@ -25,7 +25,7 @@
 #include <Windows.h>
 
 #include <tiostream.h>
-#include <TemplateBaseClass.h>
+#include <TemplateBaseClass.hpp>
 
 
 //----------------------------------------
