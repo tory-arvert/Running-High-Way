@@ -21,6 +21,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Include", "Include", "{9F78
 		Common\Include\tsstream.h = Common\Include\tsstream.h
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shader", "shader", "{7817CC45-0FD2-4390-A220-A1A541F36A23}"
+	ProjectSection(SolutionItems) = preProject
+		shader\sprite.fx = shader\sprite.fx
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32

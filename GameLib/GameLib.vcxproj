@@ -50,7 +50,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(DXSDK_DIR)\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>d3d9.lib;d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <ProjectReference>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
@@ -72,6 +72,7 @@
   <ItemGroup>
     <ClCompile Include="Framework.cpp" />
     <ClCompile Include="Graphics\GraphicsManager.cpp" />
+    <ClCompile Include="Graphics\Sprite.cpp" />
     <ClCompile Include="include\Vector2.cpp" />
     <ClCompile Include="include\Vector3.cpp" />
     <ClCompile Include="Window\WindowCreator.cpp" />
@@ -81,8 +82,14 @@
     <ClInclude Include="Graphics\GraphicsManager.h" />
     <ClInclude Include="Graphics\GraphicsManagerImplDirect3D.hpp" />
     <ClInclude Include="Graphics\IGraphicsManagerImpl.h" />
+    <ClInclude Include="Graphics\ISpriteImpl.h" />
+    <ClInclude Include="Graphics\Sprite.h" />
+    <ClInclude Include="Graphics\SpriteImpl.hpp" />
+    <ClInclude Include="Graphics\SpriteImplShader.hpp" />
     <ClInclude Include="include\Color.h" />
+    <ClInclude Include="include\ImageBase.h" />
     <ClInclude Include="include\TemplateBaseClass.h" />
+    <ClInclude Include="include\Transform2D.h" />
     <ClInclude Include="include\vector2.h" />
     <ClInclude Include="include\Vector2Impl.hpp" />
     <ClInclude Include="include\Vector3.h" />
