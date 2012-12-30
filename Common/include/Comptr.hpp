@@ -256,7 +256,7 @@ public:
 
     /// @brief == ”äŠr‰‰ŽZŽq
     bool operator ==( T* ptr ) const{
-        return ( ptr != *mppInterface ? true : false; );
+        return ( ptr != *mppInterface ? true : false );
     }
 
     /// @brief == ”äŠr‰‰ŽZŽq

@@ -25,6 +25,9 @@
 #include "ISpriteImpl.h"
 #include "GraphicsManagerImplDirect3D.hpp"
 
+#include "SpriteImpl.hpp"
+#include "SpriteImplShader.hpp"
+
 using namespace std;
 using namespace GameLib::Graphics;
 
@@ -33,7 +36,7 @@ namespace{
       
     /// @brief  実体クラスインスタンス
     /// @attention このgImplがアクセスした際の最終的な処理をするクラスである。
-    unique_ptr< ISpriteImpl > gImpl( nullptr );
+    shared_ptr< ISpriteImpl > gImpl( nullptr );
    
 
 } // end of namespace
@@ -46,7 +49,7 @@ namespace GameLib{
 
         /// @brief  実体クラスインスタンスの外部参照
         extern shared_ptr< ImplDirect3D > gImplDirect3D;
-        
+       
 
         //----------------------------------------------------------
         // 特殊メンバ関数
@@ -59,6 +62,33 @@ namespace GameLib{
 
         //----------------------------------------------------------
         // メンバ関数
+
+        /// @brief インスタンスを作成します。
+        /// @note externのデバイスからより適したImplを作成します。
+        void Sprite::Create() {
+
+            // 作成済みかどうかを確認する。
+            if(gImpl != nullptr){
+                MessageBox(NULL,_T("Spriteの描画用実体を複数作成しようとしました。"),_T("インスタンス作成中止"),MB_OK);
+                return;
+            }
+
+            // 問題なければ実体を作成
+            // ここで作成するImplによって使用するSprite描画Implが変わってくる。
+            if(gImplDirect3D->getVertexShaderReady()){
+                shared_ptr< ImplSpriteShader > Impl(nullptr);
+                Impl.reset(new ImplSpriteShader());
+                gImpl.reset();
+                gImpl = static_pointer_cast<ISpriteImpl>(Impl);
+            }else{
+                shared_ptr< ImplSprite > Impl(nullptr);
+                Impl.reset(new ImplSprite());
+                gImpl.reset();
+                gImpl = static_pointer_cast<ISpriteImpl>(Impl);
+            }
+
+
+        }
 
         //----------------------------------------
         // アクセサ

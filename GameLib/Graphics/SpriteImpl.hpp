@@ -44,7 +44,7 @@ namespace GameLib{
 
         /// @class ImplSprite
         /// @brief DirectX標準のLPD3DXSPRITEを用いたスプライト表示
-        class ImplSprite{
+        class ImplSprite : public ISpriteImpl{
 
             //----------------------------------------------------------
             // メンバ変数
@@ -56,6 +56,7 @@ namespace GameLib{
 
             //----------------------------------------------------------
             // 特殊メンバ関数
+        public:
 
             /// @brief コンストラクタ
             ImplSprite(){
@@ -142,10 +143,10 @@ namespace GameLib{
                 // テクスチャのサイズを取得
                 BaseWH<int> a_TextureSize = a_Image.Size();
 
-                int rectLeft    = a_UV.left() * a_TextureSize.width();
-                int rectTop     = a_UV.top() * a_TextureSize.height();
-                int rectRight   = rectLeft + ( a_UV.width() * a_TextureSize.width() );
-                int rectBottom  = rectTop  + ( a_UV.height() * a_TextureSize.height() );
+                int rectLeft    = int( a_UV.left() * a_TextureSize.width() );
+                int rectTop     = int( a_UV.top() * a_TextureSize.height() );
+                int rectRight   = int( rectLeft + ( a_UV.width() * a_TextureSize.width() ) );
+                int rectBottom  = int( rectTop  + ( a_UV.height() * a_TextureSize.height() ) );
 
                 // 画像の元位置
                 RECT rect={ rectLeft, rectTop, rectRight, rectBottom };
@@ -202,10 +203,10 @@ namespace GameLib{
                 // テクスチャのサイズを取得
                 BaseWH<int> a_TextureSize = a_Image.Size();
 
-                int rectLeft    = a_UV.left() * a_TextureSize.width();
-                int rectTop     = a_UV.top() * a_TextureSize.height();
-                int rectRight   = rectLeft + ( a_UV.width() * a_TextureSize.width() );
-                int rectBottom  = rectTop  + ( a_UV.height() * a_TextureSize.height() );
+                int rectLeft    = int( a_UV.left() * a_TextureSize.width() );
+                int rectTop     = int( a_UV.top() * a_TextureSize.height() );
+                int rectRight   = int( rectLeft + ( a_UV.width() * a_TextureSize.width() ) );
+                int rectBottom  = int( rectTop  + ( a_UV.height() * a_TextureSize.height() ) );
 
                 // 画像の元位置
                 RECT rect={ rectLeft, rectTop, rectRight, rectBottom };
@@ -221,7 +222,7 @@ namespace GameLib{
 
 
             /// @brief リストに積んだSpriteをまとめて描画します。
-            void DrawALL(){
+            void DrawAll(){
                 mSprite->End();
                 mbListBegin = false;                                
             }

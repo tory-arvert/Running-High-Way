@@ -101,7 +101,7 @@ namespace GameLib{
 
         /// @class ImplSpriteShader
         /// @brief DirectX標準のLPD3DXSPRITEを用いたスプライト表示
-        class ImplSpriteShader{
+        class ImplSpriteShader : public ISpriteImpl{
 
             //----------------------------------------------------------
             // メンバ変数
@@ -121,6 +121,7 @@ namespace GameLib{
 
             //----------------------------------------------------------
             // 特殊メンバ関数
+        public:
 
             /// @brief コンストラクタ
             ImplSpriteShader(){
@@ -192,13 +193,6 @@ namespace GameLib{
 
             }
 
-            /// @brief スプライトを描画リストに積み上げることを有効にします。
-            void Begin() {
-                if(!mbListBegin){
-                    mSprite->Begin(D3DXSPRITE_ALPHABLEND);
-                    mbListBegin = true;
-                }
-            }
 
             /// @brief 描画を行います。2D用基準領域サイズ用へと自動補正されます。
             /// @attention 描画の仕方によって計算に使う変数が複雑になるため事前に計算しておくことが困難。
@@ -224,7 +218,7 @@ namespace GameLib{
                 // 回転
                 D3DXMatrixRotationZ( &rot, a_Transform.degree() );
                 // ピボット分オフセット
-                world._41 = -a_Pivot.x();		
+                world._41 = -a_Pivot.x();
                 world._42 = -a_Pivot.y();
                 world = world * scale * rot;
                 world._41 += a_Transform.position().x() + a_Pivot.x();	// ピボット分オフセット
@@ -250,7 +244,7 @@ namespace GameLib{
 
 
             /// @brief リストに積んだSpriteをまとめて描画します。
-            void DrawALL(){
+            void DrawAll(){
                 if(mBuffer == nullptr || mEffect == nullptr || mDecl == nullptr ){
                     return; // 描画しない
                 }
