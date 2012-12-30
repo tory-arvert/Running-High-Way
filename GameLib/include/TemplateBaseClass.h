@@ -186,4 +186,35 @@
 
     };
 
+        /// @brief xyzのメンバ変数を持つクラス
+    template <class T>
+    class BaseXYZ{
+    protected:
+        T mx, my, mz;
+    public:
+        BaseXYZ(): mx(),my(),mz(){}   // 初期化子を使うことでその型のデフォルトコンストラクタ使用
+        BaseXYZ(const T a_x, const T a_y, const T a_z): mx(a_x), my(a_y), mz(a_z){}
+        virtual ~BaseXYZ(){}
+
+        void setX(const T a_x){ mx = a_x;}
+        void setY(const T a_y){ my = a_y;}
+        void setZ(const T a_z){ mz = a_z;}
+        void setXYZ(const BaseXYZ<T>& xyz){
+            mx = xyz.x();
+            my = xyz.y();
+            mz = xyz.z();
+        }
+        void setXYZ(const T a_x, const T a_y, const T a_z){
+            mx = a_x;
+            my = a_y;
+            mz = a_z;
+        }
+
+        const T x()const{ return mx;}
+        const T y()const{ return my;}
+        const T z()const{ return mz;}
+
+    };
+
+
 #endif

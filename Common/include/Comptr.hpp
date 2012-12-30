@@ -19,6 +19,7 @@
 #ifndef INCLUDED_COMMON_COMPTR_H
 #define INCLUDED_COMMON_COMPTR_H
 
+#include <Windows.h>
 
 /// @brief DirectXのCOMインターフェイス用の共有ポインタ
 template< class T >
@@ -235,39 +236,39 @@ public:
     //----------------------------------------
 
     /// @brief != 比較演算子
-    bool operator !=( T* ptr ){
+    bool operator !=( T* ptr ) const{
         return ( ptr != *mppInterface ? true : false );
     }
 
     /// @brief != 比較演算子
     /// @param src 比較元のCom_ptr
-    bool operator !=( Com_ptr< T >& src ){
+    bool operator !=( Com_ptr< T >& src ) const{
         return ( *mppInterface != *( src.mppInterface ) ? true : false );
     }
 
     /// @brief != 比較演算子
     /// @attention NULL比較用のため引数は無視されます
-    bool operator !=(const int null ){
+    bool operator !=(const int null ) const{
         return ( *mppInterface != NULL ? true : false );
     }
 
     //----------------------------------------
 
     /// @brief == 比較演算子
-    bool operator ==( T* ptr ){
+    bool operator ==( T* ptr ) const{
         return ( ptr != *mppInterface ? true : false; );
     }
 
     /// @brief == 比較演算子
     /// @param src 比較元のCom_ptr
-    bool operator ==( Com_ptr< T >& src ){
+    bool operator ==( Com_ptr< T >& src ) const{
         return ( *mppInterface != *( src.mppInterface ) ? true : false );
     }
     
     //----------------------------------------
 
     /// @brief ! 単項演算子
-    bool operator !(){
+    bool operator !() const{
         return ( *mppInterface == NULL ? true : false );
     }
 

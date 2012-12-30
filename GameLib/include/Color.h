@@ -20,10 +20,14 @@
 #ifndef INCLUDED_GAMELIB_COLOR_H
 #define INCLUDED_GAMELIB_COLOR_H
 
+    // プロトタイプ宣言
+    template <class T>
+    class Color3;
 
     /// @brief Alpha, Red, Green, Blue用のメンバ変数を持つクラス
     template <class T>
     class Color4{
+        
     protected:
         T mAlpha, mRed, mGreen, mBlue;
     public:
@@ -40,13 +44,14 @@
             , mGreen( color.g() )
             , mBlue( color.b() )
         {}
+        
         Color4(const Color3<T>& color)
             : mAlpha( 255 )
             , mRed( color.r() )
             , mGreen( color.g() )
             , mBlue( color.b() )
         {}
-
+        
         virtual ~Color4(){}
 
         void setA(const T a_alpha){ mAlpha = a_alpha;}
@@ -75,11 +80,13 @@
             mGreen  = a_green;
             mBlue   = a_blue;
         }
+        
         void setRGB(const Color3<T>& color){
             mRed    = color.r();
             mGreen  = color.g();
             mBlue   = color.b();
         }
+        
 
         const T a()const{ return mAlpha;}
         const T r()const{ return mRed;}
