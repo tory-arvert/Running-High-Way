@@ -24,10 +24,10 @@
 #include <Comptr.hpp>
 #include <d3d9.h>               // Texture実体用
 
-#include <Transform2D.h>
-#include <ImageBase.h>
-#include <TemplateBaseClass.h>
-#include <Color.h>
+#include <Transform2D.hpp>
+#include <ImageBase.hpp>
+#include <TemplateBaseClass.hpp>
+#include <Color.hpp>
 
 
 namespace GameLib{
@@ -68,8 +68,10 @@ namespace GameLib{
             // メンバ関数
         public:
 
-            /// @brief インスタンスを作成します。
-            /// @note externのデバイスからより適したImplを作成します。
+
+            /// @brief Spriteの実体インスタンスをDirectXデバイスの状態に合わせて作成します。
+            /// @brief これによってImplが互換性重視か速度重視かが決定します。
+            /// @attention このメソッドはexternにて関連付けたGraphicsManagerのメソッドを使用します。
             void Create();
 
             //----------------------------------------
@@ -155,14 +157,12 @@ namespace GameLib{
             /// @brief リストに積んだSpriteをまとめて描画します。
             void DrawALL() const;
 
+            void testTex();
+
             //----------------------------------------
             // ヘルパー関数
         private:
 
-            /// @brief SpriteをDirectXデバイスの状態に合わせて初期化します。
-            /// @brief これによってImplが互換性重視か速度重視かが決定します。
-            /// @attention このメソッドはexternにて関連付けたGraphicsManagerのメソッドを使用します。
-            void Initialize();
 
 
         }; // end of class Sprite

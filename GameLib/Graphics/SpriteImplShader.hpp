@@ -29,26 +29,19 @@
 #include <d3dx9.h>
 #include "GraphicsManagerImplDirect3D.hpp"
 
-#include "Sprite.h"
+
 #include <list>
-#include <Transform2D.h>
-#include <ImageBase.h>
-#include <TemplateBaseClass.h>
-#include <Color.h>
+#include <Transform2D.hpp>
+#include <ImageBase.hpp>
+#include <TemplateBaseClass.hpp>
+#include <Color.hpp>
 
 
 // StaticLibプロジェクトのプロパティからlibを呼び出す場合warningが出るため、それの代用法
 //#pragma comment(lib, "d3d9.lib")
 //#pragma comment(lib, "d3dx9.lib")
 
-
-// 無名ネームスペース定義
-namespace{
-    
-
-    
-} // end of namespace
-
+using namespace std;
 
 namespace GameLib{
     namespace Graphics{
@@ -85,19 +78,39 @@ namespace GameLib{
 
             //----------------------------------------------------------
             // メンバ変数
-        public:
+        private:
             
             D3DXMATRIX mProj;       ///< @brief 2D用射影変換Matrix
             D3DXMATRIX mWorld;      ///< @brief ワールド変換行列
-            ImageBase  m_Image;     ///< @brief UVやテクスチャ
+            ImageBase  mImage;     ///< @brief UVやテクスチャ
             Color4<float> mColor;   ///< @brief 色
             //----------------------------------------------------------
         public:
             /// @brief 描画に必要なステータスを保持します。
             void set(const D3DXMATRIX& a_World, const ImageBase& a_Image, const Color4<float> a_Color){
                 mWorld = a_World;
-                m_Image = a_Image;
+                mImage = a_Image;
                 mColor = a_Color;
+            }
+
+            /// @brief 2D用射影変換行列を返します。
+            const D3DXMATRIX* proj() const{
+                return &mProj;
+            }
+
+            /// @brief ワールド変換行列を返します。
+            const D3DXMATRIX* world() const{
+                return &mWorld;
+            }
+
+            /// @brief UVやテクスチャの値を返します。
+            ImageBase image() const{
+                return mImage;
+            }
+
+            /// @brief 色とα値を返します。
+            Color4<float> Color() const{
+                return mColor;
             }
 
         };
@@ -107,11 +120,16 @@ namespace GameLib{
         /// @brief DirectX標準のLPD3DXSPRITEを用いたスプライト表示
         class ImplSpriteShader : public ISpriteImpl{
 
+            
+            //----------------------------------------------------------
+            // 別名宣言
+            typedef shared_ptr<SpriteListState> SpriteListState_sp;
+
             //----------------------------------------------------------
             // メンバ変数
         private:
-            /// @brief  スプライトの描画ステータスのリスト
-            std::list <SpriteListState*> mDrawList;
+            /// @brief  スプライトの描画ステータスのスマートポインタリスト
+            list <SpriteListState_sp> mDrawList;
 
 
             Com_ptr <IDirect3DVertexBuffer9 > mBuffer;
@@ -154,7 +172,7 @@ namespace GameLib{
             void InitializeSprite(){
                 auto Device = gImplDirect3D->getDevice();
 
-                if(mBuffer == nullptr){
+                if(mBuffer.getPtr() == nullptr){
                     float commonVtx[] = {
                         0.0f, 0.0f, 0.0f,   0.0f, 0.0f,  // 0
                         1.0f, 0.0f, 0.0f,   1.0f, 0.0f,  // 1
@@ -165,7 +183,7 @@ namespace GameLib{
                     Device->CreateVertexBuffer( sizeof(commonVtx), 0, 0, D3DPOOL_MANAGED, mBuffer.ToCreator(), 0 );
                     float *p = 0;
                     
-                    if (mBuffer != nullptr){
+                    if (mBuffer.getPtr() != nullptr){
 
                         mBuffer->Lock( 0, 0, (void**)&p, 0 );
                         memcpy( p, commonVtx, sizeof(commonVtx) );
@@ -174,16 +192,16 @@ namespace GameLib{
                 }
 
                 // シェーダ作成
-                if (mEffect == 0) {
+                if (mEffect.getPtr() == nullptr) {
                     ID3DXBuffer *error = 0;
-                    if ( FAILED( D3DXCreateEffectFromFile( Device.getPtr(), "shader/sprite.fx", 0, 0, 0, 0, mEffect.ToCreator(), &error) ) ) {
+                    if ( FAILED( D3DXCreateEffectFromFile( Device.getPtr(), "sprite.fx", 0, 0, 0, 0, mEffect.ToCreator(), &error) ) ) {
                         OutputDebugString( (const char*)error->GetBufferPointer());
                         return;
                     }
                 }
 
                 // 頂点宣言作成
-                if (mDecl == 0) {
+                if (mDecl.getPtr() == nullptr) {
                     D3DVERTEXELEMENT9 elems[] = {
                         // 頂点座標情報の宣言(Stream,Offset,Type,Method,Usage,UsageIndex)
                         {0, 0, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_POSITION, 0},
@@ -209,7 +227,8 @@ namespace GameLib{
             void Draw(const Transform2D &a_Transform, const ImageBase &a_Image, const BaseXY<float> &a_Pivot, const BaseWH<float> &a_Size, const Color4<float> &a_Color) {
 
                 // 2D描画への射影変換行列
-                SpriteListState spriteState;
+                SpriteListState_sp spriteState;
+                spriteState.reset( new SpriteListState());
 
                 D3DXMATRIX world, scale, rot;
                 D3DXMatrixIdentity( &world );
@@ -229,8 +248,8 @@ namespace GameLib{
                 world._42 += a_Transform.position().y() + a_Pivot.y();
 
                 // データをListに保持させる。
-                spriteState.set(world, a_Image, a_Color);
-
+                spriteState->set(world, a_Image, a_Color);
+                mDrawList.push_back( spriteState );
             }
 
             /// @brief スクリーンサイズの縮尺補正に関係なく指定されたサイズで描画します。
@@ -241,9 +260,30 @@ namespace GameLib{
             /// @param a_Color 描画時に使用する色やα値
             void FixedDraw(const Transform2D &a_Transform, const ImageBase &a_Image, const BaseXY<float> &a_Pivot, const BaseWH<float> &a_Size, const Color4<float> &a_Color){
 
+                // 2D描画への射影変換行列
+                SpriteListState_sp spriteState;
+                spriteState.reset( new SpriteListState());
 
+                D3DXMATRIX world, scale, rot;
+                D3DXMatrixIdentity( &world );
+                D3DXMatrixIdentity( &scale );
+                D3DXMatrixIdentity( &rot );
+                // ポリゴンサイズ
+                D3DXMatrixScaling( &world, a_Size.width(), a_Size.height(), 1.0f );	
+                // ローカルスケール
+                D3DXMatrixScaling( &scale, a_Transform.scale().x(), a_Transform.scale().y(), 1.0f );
+                // 回転
+                D3DXMatrixRotationZ( &rot, a_Transform.degree() );
+                // ピボット分オフセット
+                world._41 = -a_Pivot.x();
+                world._42 = -a_Pivot.y();
+                world = world * scale * rot;
+                world._41 += a_Transform.position().x() + a_Pivot.x();	// ピボット分オフセット
+                world._42 += a_Transform.position().y() + a_Pivot.y();
 
-
+                // データをListに保持させる。
+                spriteState->set(world, a_Image, a_Color);
+                mDrawList.push_back( spriteState );
             }
 
 
@@ -265,11 +305,30 @@ namespace GameLib{
                 mEffect->Begin(&numPass, 0);
                 mEffect->BeginPass(0);
 
-
+                // 描画リストに登録されているスプライトを一気に描画します
+                list <SpriteListState_sp>::iterator it = mDrawList.begin();
+                for(; it != mDrawList.end(); ++it){
+                    auto p = it->get();
+                    auto a_UV = p->image().getUV();
+                    auto a_Color = p->Color();
+                    mEffect->SetMatrix( "world", p->world() );
+                    mEffect->SetMatrix( "proj", p->proj() );
+                    mEffect->SetTexture( "tex", p->image().Texture().getPtr() );
+                    mEffect->SetFloat( "uv_left"    , a_UV.left() );
+                    mEffect->SetFloat( "uv_top"     , a_UV.top() );
+                    mEffect->SetFloat( "uv_width"   , a_UV.width() );
+                    mEffect->SetFloat( "uv_height"  , a_UV.height() );
+                    mEffect->SetFloat( "alpha"      , a_Color.a() );
+                    mEffect->CommitChanges();
+                    Device->DrawPrimitive( D3DPT_TRIANGLESTRIP, 0, 2 );
+                }
 
 
                 mEffect->EndPass();
                 mEffect->End();
+
+                // 描画リストをクリアする。
+                mDrawList.clear();
 
             }
 

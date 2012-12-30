@@ -21,10 +21,10 @@
 #ifndef INCLUDE_GAMELIB_SPRITE_IMPL_INTERFACE_H
 #define INCLUDE_GAMELIB_SPRITE_IMPL_INTERFACE_H
 
-#include <Transform2D.h>
-#include <ImageBase.h>
-#include <TemplateBaseClass.h>
-#include <Color.h>
+#include <Transform2D.hpp>
+#include <ImageBase.hpp>
+#include <TemplateBaseClass.hpp>
+#include <Color.hpp>
 
 namespace GameLib{
     namespace Graphics{

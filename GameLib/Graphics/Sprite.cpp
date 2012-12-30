@@ -28,6 +28,9 @@
 #include "SpriteImpl.hpp"
 #include "SpriteImplShader.hpp"
 
+// test用
+#include <d3d9.h>
+
 using namespace std;
 using namespace GameLib::Graphics;
 
@@ -56,7 +59,9 @@ namespace GameLib{
         // 特殊メンバ関数
 
         /// @brief コンストラクタ
-        Sprite::Sprite(){}
+        Sprite::Sprite():
+            mActivity( true ){
+        }
 
         /// @brief デストラクタ
         Sprite::~Sprite(){}
@@ -64,8 +69,9 @@ namespace GameLib{
         //----------------------------------------------------------
         // メンバ関数
 
-        /// @brief インスタンスを作成します。
-        /// @note externのデバイスからより適したImplを作成します。
+        /// @brief Spriteの実体インスタンスをDirectXデバイスの状態に合わせて作成します。
+        /// @brief これによってImplが互換性重視か速度重視かが決定します。
+        /// @attention このメソッドはexternにて関連付けたGraphicsManagerのメソッドを使用します。
         void Sprite::Create(){
 
             // 作成済みかどうかを確認する。
@@ -233,11 +239,23 @@ namespace GameLib{
             }
         }
 
-            /// @brief スクリーンサイズの縮尺補正に関係なく指定されたサイズで描画します。
+        /// @brief スクリーンサイズの縮尺補正に関係なく指定されたサイズで描画します。
         void Sprite::FixedDraw() const{
             if(mActivity){
                 gImplDirect3D->mSpriteImpl->FixedDraw(mTransform, mImage, mPivot, mSize, mColor);
             }
+        }
+
+        /// @brief リストに積んだSpriteをまとめて描画します。
+        void Sprite::DrawALL() const{
+            gImplDirect3D->mSpriteImpl->DrawAll();
+        }
+
+        void Sprite::testTex(){
+            Com_ptr< IDirect3DTexture9 > tex;
+            auto Device = gImplDirect3D->getDevice();
+            D3DXCreateTextureFromFile( Device.getPtr(), "resource/tree2.png", tex.ToCreator());
+            this->Texture(tex);
         }
 
         //----------------------------------------
