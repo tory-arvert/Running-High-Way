@@ -34,9 +34,13 @@ using namespace GameLib::Graphics;
 namespace{
       
     /// @brief  実体クラスインスタンス
-    /// @attention このgImplがアクセスした際の最終的な処理をするクラスである。
-    unique_ptr< IGraphicsManagerImpl > gImpl( nullptr );
+    /// @attention このインターフェイス用gImplに実体化したImplを継承させて使用する。
+    /// @attention 通常使用する形式ではインターフェイスで公開されているメソッドのみを使用させる。
+    shared_ptr< IGraphicsManagerImpl > gImpl( nullptr );
+
+
     
+
 } // end of namespace
 
 //----------------------------------------------------------
@@ -44,6 +48,12 @@ namespace{
 
 namespace GameLib{
     namespace Graphics{
+
+        /// @brief  実体クラスインスタンス
+        /// @attention このImplがアクセスした際の最終的な処理をするクラスである。
+        /// @attention これは公開していないImplのpublicメソッドをexternで使用できるようにするためである。
+        /// @attention モジュールから使用するため無名ネームスペースには隠ぺいしない。
+        shared_ptr< ImplDirect3D > gImplDirect3D( nullptr );    
 
         //----------------------------------------------------------
         // 特殊メンバ
@@ -86,11 +96,15 @@ namespace GameLib{
             
             // 問題なければ実体を作成
             // ここで作成するImplによって使用する描画デバイスが変わってくる。
-            /// @todo DirectXやOpenGLなどで作成を切り替えられるようにする。
-            gImpl.reset(new ImplDirect3D(
+            /// @todo ここで分岐を作り、DirectXやOpenGLなどで作成を切り替えられるようにする。
+            gImplDirect3D.reset(new ImplDirect3D(
                 a_HWND, a_Width, a_Height, a_Fullscreen, a_Vsync, a_AntiAlias, a_Width2D, a_Height2D )
                 );
 
+            // インターフェイスクラスに継承させる。
+            // 普段はgImplを使用し、Implの公開してないpublic関数を使用するときはImplDirect3Dを使用する。            
+            gImpl = static_pointer_cast<IGraphicsManagerImpl>(gImplDirect3D);
+                
         }
 
         /// @brief インスタンスを破棄します。
@@ -99,7 +113,8 @@ namespace GameLib{
             if(gImpl == nullptr){
                 return;
             }
-            gImpl.reset( nullptr );
+            gImpl.reset();
+            gImplDirect3D.reset();
         }
 
 

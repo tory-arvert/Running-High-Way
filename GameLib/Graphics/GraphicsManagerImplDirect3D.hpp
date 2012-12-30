@@ -28,6 +28,10 @@
 #include "TemplateBaseClass.h"
 #include "Comptr.hpp"
 
+// StaticLibプロジェクトのプロパティからlibを呼び出す場合warningが出るため、それの代用法
+#pragma comment(lib, "d3d9.lib")
+#pragma comment(lib, "d3dx9.lib")
+
 
 namespace GameLib{
     namespace Graphics{
@@ -338,6 +342,32 @@ namespace GameLib{
             IDirect3DDevice9_sp getDevice() const {
                 return mDevice;
             }
+
+            /// @brief 頂点シェーダが使用可能かどうかを返します。
+            /// @return bool 頂点シェーダの使用の可否
+            const bool getVertexShaderReady() const { return mStatesFlag.isVertexShaderReady(); }
+
+            /// @brief ピクセルシェーダが使用可能かどうかを返します。
+            /// @return bool ピクセルシェーダの使用の可否
+            const bool getPixelShaderReady() const { return mStatesFlag.isPixelShaderReady(); }
+
+            /// @brief 2D用の基準領域サイズを取得します。
+            /// @param a_w 基準の幅を返します。
+            /// @param a_h 基準の高さを返します。
+            void get2DClientSize( int *a_w, int *a_h){
+                *a_w = m2DClient.width();
+                *a_h = m2DClient.height();
+            }
+
+            /// @brief クライアント領域サイズを取得します。
+            /// @param a_w 基準の幅を返します。
+            /// @param a_h 基準の高さを返します。
+            void getClientSize( int *a_w, int *a_h){
+                *a_w = mClient.width();
+                *a_h = mClient.height();
+            }
+
+
 
             /// @brief  これまでのフレームカウントを取得します。
             /// @return フレームカウント
