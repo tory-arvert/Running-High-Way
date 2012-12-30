@@ -27,11 +27,15 @@
 
 #include <d3d9.h>
 #include <d3dx9.h>
-#include <d3d9types.h>
 #include "GraphicsManagerImplDirect3D.hpp"
 
 #include "Sprite.h"
 #include <list>
+#include <Transform2D.h>
+#include <ImageBase.h>
+#include <TemplateBaseClass.h>
+#include <Color.h>
+
 
 // StaticLibプロジェクトのプロパティからlibを呼び出す場合warningが出るため、それの代用法
 //#pragma comment(lib, "d3d9.lib")

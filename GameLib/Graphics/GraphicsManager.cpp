@@ -27,6 +27,8 @@
 #include "IGraphicsManagerImpl.h"
 #include "GraphicsManagerImplDirect3D.hpp"
 
+#include "Sprite.h"
+
 using namespace std;
 using namespace GameLib::Graphics;
 
@@ -185,7 +187,8 @@ namespace GameLib{
         void GraphicsManager::InitializeManager(){
 
             /// @todo Line‚âSprite‚ÌŠî’êƒf[ƒ^‚Ì‰Šú‰»‚È‚Ç
-            
+            Sprite sp;
+            sp.Create();
         }
 
 

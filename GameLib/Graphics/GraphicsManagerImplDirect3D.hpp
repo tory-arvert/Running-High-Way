@@ -28,6 +28,8 @@
 #include "TemplateBaseClass.h"
 #include "Comptr.hpp"
 
+#include "ISpriteImpl.h"
+
 // StaticLibプロジェクトのプロパティからlibを呼び出す場合warningが出るため、それの代用法
 #pragma comment(lib, "d3d9.lib")
 #pragma comment(lib, "d3dx9.lib")
@@ -174,8 +176,8 @@ namespace GameLib{
             typedef Com_ptr< IDirect3D9 >  IDirect3D9_sp;
             /// @brief IDirect3DDevice9のスマートポインタ型
             typedef Com_ptr< IDirect3DDevice9 > IDirect3DDevice9_sp;
-
-
+            /// @brief スプライトインターフェイスのスマートポインタ型
+            typedef shared_ptr< ISpriteImpl > ISpriteImpl_sp;
             //----------------------------------------------------------
             // メンバ変数
         private:
@@ -192,6 +194,10 @@ namespace GameLib{
 
             D3DStatesFlag mStatesFlag;      ///< @brief Direct3D環境の状態フラグに関するものを集めたクラス
             D3DPRESENT_PARAMETERS mPresentParams;   ///< @brief PresentParameters構造体
+        public:
+            /// @brief スプライトのインターフェイス用インプル
+            /// @attention このSpriteImplはexternで使用する仕組みとなっている。
+            ISpriteImpl_sp mSpriteImpl;     ///< @brief スプライトのインターフェイスインプル
 
             //----------------------------------------------------------
             // 特殊メンバ

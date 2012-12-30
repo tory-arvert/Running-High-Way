@@ -37,9 +37,9 @@ namespace GameLib{
             // 特殊メンバ関数
         public:
             /// @brief コンストラクタ
-            Transform2D();
+            Transform2D(){}
             /// @brief デストラクタ
-            ~Transform2D();
+            ~Transform2D(){}
 
             //----------------------------------------------------------
             // メンバ関数

@@ -120,10 +120,10 @@ namespace GameLib{
             // 特殊メンバ関数
         public:
             /// @brief コンストラクタ
-            ImageBase();
+            ImageBase(){}
 
             /// @brief デストラクタ
-            ~ImageBase();
+            ~ImageBase(){}
 
             //----------------------------------------------------------
             // メンバ関数

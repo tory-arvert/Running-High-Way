@@ -31,6 +31,7 @@
 using namespace std;
 using namespace GameLib::Graphics;
 
+/*
 // 無名ネームスペース定義
 namespace{
       
@@ -40,7 +41,7 @@ namespace{
    
 
 } // end of namespace
-
+*/
 //----------------------------------------------------------
 //----------------------------------------------------------
 
@@ -65,10 +66,10 @@ namespace GameLib{
 
         /// @brief インスタンスを作成します。
         /// @note externのデバイスからより適したImplを作成します。
-        void Sprite::Create() {
+        void Sprite::Create(){
 
             // 作成済みかどうかを確認する。
-            if(gImpl != nullptr){
+            if(gImplDirect3D->mSpriteImpl != nullptr){
                 MessageBox(NULL,_T("Spriteの描画用実体を複数作成しようとしました。"),_T("インスタンス作成中止"),MB_OK);
                 return;
             }
@@ -78,13 +79,13 @@ namespace GameLib{
             if(gImplDirect3D->getVertexShaderReady()){
                 shared_ptr< ImplSpriteShader > Impl(nullptr);
                 Impl.reset(new ImplSpriteShader());
-                gImpl.reset();
-                gImpl = static_pointer_cast<ISpriteImpl>(Impl);
+                gImplDirect3D->mSpriteImpl.reset();
+                gImplDirect3D->mSpriteImpl = static_pointer_cast<ISpriteImpl>(Impl);
             }else{
                 shared_ptr< ImplSprite > Impl(nullptr);
                 Impl.reset(new ImplSprite());
-                gImpl.reset();
-                gImpl = static_pointer_cast<ISpriteImpl>(Impl);
+                gImplDirect3D->mSpriteImpl.reset();
+                gImplDirect3D->mSpriteImpl = static_pointer_cast<ISpriteImpl>(Impl);
             }
 
 
@@ -228,14 +229,14 @@ namespace GameLib{
         /// @brief 描画を行います。2D用基準領域サイズ用へと自動補正されます。
         void Sprite::Draw() const{
             if(mActivity){
-                gImpl->Draw(mTransform, mImage, mPivot, mSize, mColor);
+                gImplDirect3D->mSpriteImpl->Draw(mTransform, mImage, mPivot, mSize, mColor);
             }
         }
 
             /// @brief スクリーンサイズの縮尺補正に関係なく指定されたサイズで描画します。
         void Sprite::FixedDraw() const{
             if(mActivity){
-                gImpl->FixedDraw(mTransform, mImage, mPivot, mSize, mColor);
+                gImplDirect3D->mSpriteImpl->FixedDraw(mTransform, mImage, mPivot, mSize, mColor);
             }
         }
 
