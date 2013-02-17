@@ -17,6 +17,9 @@
     <ClCompile Include="Graphics\Sprite.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\Sqare.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework.h" />
@@ -70,6 +73,9 @@
     </ClInclude>
     <ClInclude Include="include\TemplateBaseClass.hpp">
       <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Sqare.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
