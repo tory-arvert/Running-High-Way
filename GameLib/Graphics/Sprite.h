@@ -30,6 +30,8 @@
 #include <Color.hpp>
 
 
+#include <tiostream.h>          ///< @todo TestTexCreate用、開発終了時は撤去する
+
 namespace GameLib{
     namespace Graphics{
 
@@ -71,12 +73,18 @@ namespace GameLib{
 
             /// @brief Spriteの実体インスタンスをDirectXデバイスの状態に合わせて作成します。
             /// @brief これによってImplが互換性重視か速度重視かが決定します。
+            /// @brief 引数なし、またはtrueで優先的にshader(速度重視)になるようにします。
             /// @attention このメソッドはexternにて関連付けたGraphicsManagerのメソッドを使用します。
-            void Create();
+            /// @param a_ShaderPriority 優先的にshaderで処理するように設定するかどうか
+            void Create(const bool a_ShaderPriority = true);
 
             //----------------------------------------
             // アクセサ
 
+            /// @brief 初期状態のステータスを設定します。
+            /// @brief Position(0,0),Rotate(0),Scale(1,1),Texture(null),UV(0.0f,0.0f,1.0f,1.0f)
+            /// @brief Size(128,128),Pivot(0,0),Color(255,255,255),Alpha(255),Priority(1.0f),Activity(true)
+            void Initialize();
             
             /// @brief 描画時の基点となる座標を指定します。
             /// @param a_x スクリーン上のX座標
@@ -136,6 +144,11 @@ namespace GameLib{
             /// @param a_Alpha 透明度
             void Alpha(const float a_Alpha);
 
+            /// @brief テクスチャのα値を使用するか設定します。
+            /// @brief このステータスによってListの配列が最適化されます。
+            /// @param a_Value テクスチャのα値を有効にするかどうか
+            void UseTextureAlpha(const bool a_Value);
+
             /// @brief 描画時の表示優先度を設定します。
             /// @param a_z 優先度
             void Priority(const float a_z);
@@ -157,7 +170,10 @@ namespace GameLib{
             /// @brief リストに積んだSpriteをまとめて描画します。
             void DrawALL() const;
 
-            void testTex();
+            /// @brief ライブラリ作成時のテスト用関数
+            /// @brief テクスチャを仮作成します。
+            /// @todo 完成したらこのメソッドは削除します！
+            void TestTexCreate(const std::tstring a_str);
 
             //----------------------------------------
             // ヘルパー関数

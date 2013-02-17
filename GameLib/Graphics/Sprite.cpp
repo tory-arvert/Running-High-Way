@@ -34,17 +34,7 @@
 using namespace std;
 using namespace GameLib::Graphics;
 
-/*
-// 無名ネームスペース定義
-namespace{
-      
-    /// @brief  実体クラスインスタンス
-    /// @attention このgImplがアクセスした際の最終的な処理をするクラスである。
-    shared_ptr< ISpriteImpl > gImpl( nullptr );
-   
 
-} // end of namespace
-*/
 //----------------------------------------------------------
 //----------------------------------------------------------
 
@@ -59,8 +49,8 @@ namespace GameLib{
         // 特殊メンバ関数
 
         /// @brief コンストラクタ
-        Sprite::Sprite():
-            mActivity( true ){
+        Sprite::Sprite(){
+            Initialize();
         }
 
         /// @brief デストラクタ
@@ -71,8 +61,10 @@ namespace GameLib{
 
         /// @brief Spriteの実体インスタンスをDirectXデバイスの状態に合わせて作成します。
         /// @brief これによってImplが互換性重視か速度重視かが決定します。
+        /// @brief 引数なし、またはtrueで優先的にshader(速度重視)になるようにします。
         /// @attention このメソッドはexternにて関連付けたGraphicsManagerのメソッドを使用します。
-        void Sprite::Create(){
+        /// @param a_ShaderPriority 優先的にshaderで処理するように設定するかどうか
+        void Sprite::Create(const bool a_ShaderPriority){
 
             // 作成済みかどうかを確認する。
             if(gImplDirect3D->mSpriteImpl != nullptr){
@@ -80,9 +72,10 @@ namespace GameLib{
                 return;
             }
 
+
             // 問題なければ実体を作成
             // ここで作成するImplによって使用するSprite描画Implが変わってくる。
-            if(gImplDirect3D->getVertexShaderReady()){
+            if(a_ShaderPriority && gImplDirect3D->getVertexShaderReady()){
                 shared_ptr< ImplSpriteShader > Impl(nullptr);
                 Impl.reset(new ImplSpriteShader());
                 gImplDirect3D->mSpriteImpl.reset();
@@ -94,11 +87,28 @@ namespace GameLib{
                 gImplDirect3D->mSpriteImpl = static_pointer_cast<ISpriteImpl>(Impl);
             }
 
-
         }
 
         //----------------------------------------
         // アクセサ
+
+        /// @brief 初期状態のステータスを設定します。
+        /// @brief Position(0,0),Rotate(0),Scale(1,1),Texture(null),UV(0.0f,0.0f,1.0f,1.0f)
+        /// @brief Size(128,128),Pivot(0,0),Color(255,255,255),Alpha(255),Priority(1.0f),Activity(true)
+        void Sprite::Initialize(){
+
+            Position(0,0);
+            Rotate(0);
+            Scale(1.0f, 1.0f);
+            //Texture(NULL);
+            UV(0.0f, 0.0f, 1.0f, 1.0f);
+            //Size(0,0);
+            Pivot(0,0);
+            Color(255, 255, 255);
+            Alpha(255);
+            Priority(1.0f);
+            Activity(true);
+        }
 
             
         /// @brief 描画時の基点となる座標を指定します。
@@ -127,7 +137,7 @@ namespace GameLib{
         /// @attention テクスチャを指定しない場合は指定した色で矩形を塗りつぶします。
         /// @param a_Texture 使用するテクスチャ
         void Sprite::Texture(const Texture_sp a_Texture){
-            mImage.setTexture( a_Texture );
+                mImage.setTexture( a_Texture );
         }
 
         /// @brief UVの範囲をfloatにて設定します。
@@ -142,19 +152,19 @@ namespace GameLib{
 
             // UV領域の値をfloatで設定したためfalse指定
             mImage.setUVint( false );
-            //auto texture = ;
+            
             // テクスチャ実体がある場合
             if(mImage.Texture() != nullptr){
-            //if(texture != nullptr){
+            
                 // テクスチャの全体サイズを取得
                 auto textureSize = mImage.Size();
                     
                 // スプライトの幅がまだ未設定であるならUVの範囲をサイズとして指定
-                if(textureSize.width() == 0){
+                if(mSize.width() == 0){
                     mSize.setWidth( textureSize.width()* a_Width );
                 }
                 // スプライトの高さがまだ未設定であるならUVの範囲をサイズとして指定
-                if(textureSize.height() == 0){
+                if(mSize.height() == 0){
                     mSize.setHeight( textureSize.height() * a_Height );
                 }
 
@@ -218,6 +228,13 @@ namespace GameLib{
             mColor.setA( a_Alpha );
         }
 
+        /// @brief テクスチャのα値を使用するか設定します。
+        /// @brief このステータスによってListの配列が最適化されます。
+        /// @param a_Value テクスチャのα値を有効にするかどうか
+        void Sprite::UseTextureAlpha(const bool a_Value){
+            mImage.UseTextureAlpha( a_Value );
+        }
+
         /// @brief 描画時の表示優先度を設定します。
         /// @param a_z 優先度
         void Sprite::Priority(const float a_z){
@@ -251,10 +268,13 @@ namespace GameLib{
             gImplDirect3D->mSpriteImpl->DrawAll();
         }
 
-        void Sprite::testTex(){
+        /// @brief ライブラリ作成時のテスト用関数
+        /// @brief テクスチャを仮作成します。
+        /// @todo 完成したらこのメソッドは削除します！
+        void Sprite::TestTexCreate(const std::tstring a_str){
             Com_ptr< IDirect3DTexture9 > tex;
             auto Device = gImplDirect3D->getDevice();
-            D3DXCreateTextureFromFile( Device.getPtr(), "resource/tree2.png", tex.ToCreator());
+            D3DXCreateTextureFromFile( Device.getPtr(), a_str.c_str(), tex.ToCreator());
             this->Texture(tex);
         }
 

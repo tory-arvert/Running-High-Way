@@ -28,9 +28,12 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 #include "GraphicsManagerImplDirect3D.hpp"
-
+#include "Sqare.h"
 
 #include <list>
+#include <algorithm>
+#include <functional>
+
 #include <Transform2D.hpp>
 #include <ImageBase.hpp>
 #include <TemplateBaseClass.hpp>
@@ -53,6 +56,10 @@ namespace GameLib{
         /// @class SpriteListState
         /// @brief スプライト描画用のステータスリスト
         class SpriteListState{
+
+            //----------------------------------------------------------
+            // 別名宣言
+            typedef Com_ptr< IDirect3DTexture9 > Texture_sp;
 
             //----------------------------------------------------------
             // 特殊メンバ関数
@@ -82,14 +89,16 @@ namespace GameLib{
             
             D3DXMATRIX mProj;       ///< @brief 2D用射影変換Matrix
             D3DXMATRIX mWorld;      ///< @brief ワールド変換行列
-            ImageBase  mImage;     ///< @brief UVやテクスチャ
+            Texture_sp mTexture;    ///< @brief テクスチャ
+            BaseUV<float> mUV;      ///< @brief UV
             Color4<float> mColor;   ///< @brief 色
             //----------------------------------------------------------
         public:
             /// @brief 描画に必要なステータスを保持します。
-            void set(const D3DXMATRIX& a_World, const ImageBase& a_Image, const Color4<float> a_Color){
+            void set(const D3DXMATRIX& a_World, const Texture_sp& a_Texture, const BaseUV<float>& a_UV, const Color4<float>& a_Color){
                 mWorld = a_World;
-                mImage = a_Image;
+                mTexture = a_Texture;
+                mUV = a_UV;
                 mColor = a_Color;
             }
 
@@ -104,13 +113,22 @@ namespace GameLib{
             }
 
             /// @brief UVやテクスチャの値を返します。
-            ImageBase image() const{
-                return mImage;
+            Texture_sp texture() const{
+                return mTexture;
+            }
+
+            /// @brief UVの値を返します。
+            BaseUV<float> UV() const{
+                return mUV;
             }
 
             /// @brief 色とα値を返します。
             Color4<float> Color() const{
                 return mColor;
+            }
+
+            const float z() const{
+                return mWorld._43;
             }
 
         };
@@ -128,8 +146,10 @@ namespace GameLib{
             //----------------------------------------------------------
             // メンバ変数
         private:
-            /// @brief  スプライトの描画ステータスのスマートポインタリスト
+            /// @brief  不透明スプライトの描画ステータスのスマートポインタリスト
             list <SpriteListState_sp> mDrawList;
+            /// @brief  半透明スプライトの描画ステータスのスマートポインタリスト
+            list <SpriteListState_sp> mAlphaDrawList;
 
 
             Com_ptr <IDirect3DVertexBuffer9 > mBuffer;
@@ -172,7 +192,7 @@ namespace GameLib{
             void InitializeSprite(){
                 auto Device = gImplDirect3D->getDevice();
 
-                if(mBuffer.getPtr() == nullptr){
+                if(mBuffer == nullptr){
                     float commonVtx[] = {
                         0.0f, 0.0f, 0.0f,   0.0f, 0.0f,  // 0
                         1.0f, 0.0f, 0.0f,   1.0f, 0.0f,  // 1
@@ -183,7 +203,7 @@ namespace GameLib{
                     Device->CreateVertexBuffer( sizeof(commonVtx), 0, 0, D3DPOOL_MANAGED, mBuffer.ToCreator(), 0 );
                     float *p = 0;
                     
-                    if (mBuffer.getPtr() != nullptr){
+                    if (mBuffer != nullptr){
 
                         mBuffer->Lock( 0, 0, (void**)&p, 0 );
                         memcpy( p, commonVtx, sizeof(commonVtx) );
@@ -192,16 +212,16 @@ namespace GameLib{
                 }
 
                 // シェーダ作成
-                if (mEffect.getPtr() == nullptr) {
+                if (mEffect == nullptr) {
                     ID3DXBuffer *error = 0;
-                    if ( FAILED( D3DXCreateEffectFromFile( Device.getPtr(), "sprite.fx", 0, 0, 0, 0, mEffect.ToCreator(), &error) ) ) {
+                    if ( FAILED( D3DXCreateEffectFromFile( Device.getPtr(), "../shader/sprite.fx", 0, 0, 0, 0, mEffect.ToCreator(), &error) ) ) {
                         OutputDebugString( (const char*)error->GetBufferPointer());
                         return;
                     }
                 }
 
                 // 頂点宣言作成
-                if (mDecl.getPtr() == nullptr) {
+                if (mDecl == nullptr) {
                     D3DVERTEXELEMENT9 elems[] = {
                         // 頂点座標情報の宣言(Stream,Offset,Type,Method,Usage,UsageIndex)
                         {0, 0, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_POSITION, 0},
@@ -230,6 +250,12 @@ namespace GameLib{
                 SpriteListState_sp spriteState;
                 spriteState.reset( new SpriteListState());
 
+                // 計算が必要になるものは各引数より必要なものを抽出
+                // 拡大率を抽出
+                auto a_Scale = a_Transform.scale();
+                // 座標を抽出
+                auto a_Position = a_Transform.position();
+
                 D3DXMATRIX world, scale, rot;
                 D3DXMatrixIdentity( &world );
                 D3DXMatrixIdentity( &scale );
@@ -237,18 +263,49 @@ namespace GameLib{
                 // ポリゴンサイズ
                 D3DXMatrixScaling( &world, a_Size.width(), a_Size.height(), 1.0f );	
                 // ローカルスケール
-                D3DXMatrixScaling( &scale, a_Transform.scale().x(), a_Transform.scale().y(), 1.0f );
+                D3DXMatrixScaling( &scale, a_Scale.x() * mResolution.x(), a_Scale.y() * mResolution.y(), 1.0f );
                 // 回転
-                D3DXMatrixRotationZ( &rot, a_Transform.degree() );
+                D3DXMatrixRotationZ( &rot, D3DXToRadian(a_Transform.degree()) );
                 // ピボット分オフセット
                 world._41 = -a_Pivot.x();
                 world._42 = -a_Pivot.y();
-                world = world * scale * rot;
-                world._41 += a_Transform.position().x() + a_Pivot.x();	// ピボット分オフセット
-                world._42 += a_Transform.position().y() + a_Pivot.y();
 
-                // データをListに保持させる。
-                spriteState->set(world, a_Image, a_Color);
+                // トランスフォームを計算する
+                world = world * scale * rot;
+                // 座標を移動する
+                world._41 += ( a_Position.x() * mResolution.x() );
+                world._42 += ( a_Position.y() * mResolution.y() );
+                world._43 += ( a_Transform.position().z()  );
+
+                auto a_Texture = a_Image.Texture();
+                auto a_UV = a_Image.getUV();
+
+                // テクスチャが存在しない場合
+                if(a_Texture == nullptr){
+                    // 色矩形をセット
+                    Sqare sqare;
+                    a_Texture = sqare.texture();
+                    a_UV.setUV(0,0,1,1);
+                }else if( a_Image.isTextureAlpha() ){
+                    // 描画に必要なデータセットをまとめる
+                    spriteState->set(world, a_Texture, a_UV, a_Color); 
+                    // 半透明Listに追加する
+                    mAlphaDrawList.push_back( spriteState );
+                    return;
+                }
+
+                // 半透明が指定されているとき
+                if( a_Color.a() < 255){
+                    // 描画に必要なデータセットをまとめる
+                    spriteState->set(world, a_Texture, a_UV, a_Color); 
+                    // 半透明Listに追加する
+                    mAlphaDrawList.push_back( spriteState );
+                    return;
+                }
+
+                // 描画に必要なデータセットをまとめる
+                spriteState->set(world, a_Texture, a_UV, a_Color);   
+                // 不透明Listに追加する
                 mDrawList.push_back( spriteState );
             }
 
@@ -264,6 +321,12 @@ namespace GameLib{
                 SpriteListState_sp spriteState;
                 spriteState.reset( new SpriteListState());
 
+                // 計算が必要になるものは各引数より必要なものを抽出
+                // 拡大率を抽出
+                auto a_Scale = a_Transform.scale();
+                // 座標を抽出
+                auto a_Position = a_Transform.position();
+
                 D3DXMATRIX world, scale, rot;
                 D3DXMatrixIdentity( &world );
                 D3DXMatrixIdentity( &scale );
@@ -271,18 +334,46 @@ namespace GameLib{
                 // ポリゴンサイズ
                 D3DXMatrixScaling( &world, a_Size.width(), a_Size.height(), 1.0f );	
                 // ローカルスケール
-                D3DXMatrixScaling( &scale, a_Transform.scale().x(), a_Transform.scale().y(), 1.0f );
+                D3DXMatrixScaling( &scale, a_Scale.x(), a_Scale.y(), 1.0f );
                 // 回転
-                D3DXMatrixRotationZ( &rot, a_Transform.degree() );
+                D3DXMatrixRotationZ( &rot, D3DXToRadian(a_Transform.degree()) );
                 // ピボット分オフセット
                 world._41 = -a_Pivot.x();
                 world._42 = -a_Pivot.y();
                 world = world * scale * rot;
-                world._41 += a_Transform.position().x() + a_Pivot.x();	// ピボット分オフセット
-                world._42 += a_Transform.position().y() + a_Pivot.y();
+                world._41 += a_Position.x();
+                world._42 += a_Position.y();
+                world._43 += a_Transform.position().z();
 
-                // データをListに保持させる。
-                spriteState->set(world, a_Image, a_Color);
+                auto a_Texture = a_Image.Texture();
+                auto a_UV = a_Image.getUV();
+
+                // テクスチャが存在しない場合
+                if(a_Texture == nullptr){
+                    // 色矩形をセット
+                    Sqare sqare;
+                    a_Texture = sqare.texture();
+                    a_UV.setUV(0,0,1.0,1.0);
+                }else if( a_Image.isTextureAlpha() ){
+                    // 描画に必要なデータセットをまとめる
+                    spriteState->set(world, a_Texture, a_UV, a_Color); 
+                    // 半透明Listに追加する
+                    mAlphaDrawList.push_back( spriteState );
+                    return;
+                }
+
+                // 半透明が指定されているとき
+                if( a_Color.a() < 255){
+                    // 描画に必要なデータセットをまとめる
+                    spriteState->set(world, a_Texture, a_UV, a_Color); 
+                    // 半透明Listに追加する
+                    mAlphaDrawList.push_back( spriteState );
+                    return;
+                }
+
+                // 描画に必要なデータセットをまとめる
+                spriteState->set(world, a_Texture, a_UV, a_Color);   
+                // 不透明Listに追加する
                 mDrawList.push_back( spriteState );
             }
 
@@ -298,6 +389,8 @@ namespace GameLib{
                 Device->SetStreamSource( 0, mBuffer.getPtr(), 0, sizeof(float) * 5);
                 Device->SetVertexDeclaration( mDecl.getPtr() );
 
+                // 描画前に各Listをソートします。
+                SortList();
 
                 // シェーダ開始
                 UINT numPass = 0;
@@ -305,34 +398,87 @@ namespace GameLib{
                 mEffect->Begin(&numPass, 0);
                 mEffect->BeginPass(0);
 
-                // 描画リストに登録されているスプライトを一気に描画します
-                list <SpriteListState_sp>::iterator it = mDrawList.begin();
-                for(; it != mDrawList.end(); ++it){
-                    auto p = it->get();
-                    auto a_UV = p->image().getUV();
-                    auto a_Color = p->Color();
-                    mEffect->SetMatrix( "world", p->world() );
-                    mEffect->SetMatrix( "proj", p->proj() );
-                    mEffect->SetTexture( "tex", p->image().Texture().getPtr() );
-                    mEffect->SetFloat( "uv_left"    , a_UV.left() );
-                    mEffect->SetFloat( "uv_top"     , a_UV.top() );
-                    mEffect->SetFloat( "uv_width"   , a_UV.width() );
-                    mEffect->SetFloat( "uv_height"  , a_UV.height() );
-                    mEffect->SetFloat( "alpha"      , a_Color.a() );
-                    mEffect->CommitChanges();
-                    Device->DrawPrimitive( D3DPT_TRIANGLESTRIP, 0, 2 );
-                }
+                Device->SetRenderState(D3DRS_LIGHTING, false);              // ライト計算を切る
+
+                Device->SetRenderState(D3DRS_ALPHABLENDENABLE,false);       // アルファブレンディングの有効化
+                Device->SetRenderState(D3DRS_ALPHATESTENABLE,true);         // α判定を実行
+                Device->SetRenderState( D3DRS_ZWRITEENABLE,true);           // Zバッファに書き込みを行う
+                Device->SetRenderState( D3DRS_ZENABLE,false);               // Zバッファ判定は行う
+                DrawSpriteList(mDrawList);
+                
+                Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);      // SRCの設定
+                Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);  // DESTの設定
+                Device->SetRenderState(D3DRS_ALPHABLENDENABLE,true);            // アルファブレンディングの有効化
+                Device->SetRenderState(D3DRS_ALPHATESTENABLE,true);             // α判定を実行
+                Device->SetRenderState( D3DRS_ZWRITEENABLE,true);               // Zバッファに書き込みを行う
+                Device->SetRenderState( D3DRS_ZENABLE,false);                   // Zバッファ判定は行わない
+                DrawSpriteList(mAlphaDrawList);
 
 
+
+                // 描画リストをクリアする。
+                mAlphaDrawList.clear();
+
+                
                 mEffect->EndPass();
                 mEffect->End();
 
-                // 描画リストをクリアする。
-                mDrawList.clear();
+
 
             }
 
 
+            /// @brief 指定したリストに積んだSpriteをまとめて描画します。
+            void DrawSpriteList(list <SpriteListState_sp>& a_List){
+
+                auto Device = gImplDirect3D->getDevice();
+
+                list <SpriteListState_sp>::iterator it = a_List.begin();
+                for(; it != a_List.end(); it++){
+                    auto p = it->get();
+                    auto a_UV = p->UV();
+                    auto a_Color = p->Color();
+                    D3DXCOLOR color( p->Color().r(), p->Color().g(), p->Color().b(), p->Color().a());
+                    // 色情報を正規化
+                    color*= 0.00392156862;
+                    mEffect->SetMatrix( "world", p->world() );
+                    mEffect->SetMatrix( "proj", p->proj() );
+                    mEffect->SetTexture( "tex", p->texture().getPtr() );
+                    mEffect->SetFloat( "uv_left"    , a_UV.left() );
+                    mEffect->SetFloat( "uv_top"     , a_UV.top() );
+                    mEffect->SetFloat( "uv_width"   , a_UV.width() );
+                    mEffect->SetFloat( "uv_height"  , a_UV.height() );
+                    mEffect->SetValue( "color", (void*)(float *)&color, sizeof(D3DXCOLOR) );
+                    mEffect->CommitChanges();
+                    Device->DrawPrimitive( D3DPT_TRIANGLESTRIP, 0, 2 );
+                }
+                // 描画リストをクリアする。
+                a_List.clear();
+
+            }
+
+            /// @brief それぞれのリストを適した順番にソートします。
+            void SortList(){
+                mDrawList.sort(&SortDraw);
+                mAlphaDrawList.sort(&SortAlphaDraw);
+            }
+
+            /// @brief 不透明Spriteのソートをする際の処理
+            /// @param a_Left 左側ポインタ要素
+            /// @param a_Right 右側ポインタ要素
+            /// @return bool 入れ替えるか否か
+            static bool SortDraw(const SpriteListState_sp a_Left, const SpriteListState_sp a_Right){
+                return ((a_Left)->z() < (a_Right)->z() );
+            }
+
+
+            /// @brief 半透明Spriteのソートをする際の処理
+            /// @param a_Left 左側ポインタ要素
+            /// @param a_Right 右側ポインタ要素
+            /// @return bool 入れ替えるか否か
+            static bool SortAlphaDraw(const SpriteListState_sp a_Left, const SpriteListState_sp a_Right){
+                return ((a_Left)->z() > (a_Right)->z() );
+            }
 
 
         };

@@ -6,10 +6,13 @@ float uv_left;
 float uv_top;
 float uv_width;
 float uv_height;
-float alpha;
+float4 color;
 
 sampler smp = sampler_state {
     texture = <tex>;
+    magfilter = LINEAR;
+    minfilter = LINEAR;
+    mipfilter = LINEAR;
 };
 
 
@@ -38,9 +41,9 @@ VS_OUT vs_main( VS_IN In ) {
 
 // ピクセルシェーダ
 float4 ps_main(VS_OUT In) : COLOR0 {
-    float4 color = tex2D( smp, In.uv );
-    color.a *= alpha;
-    return color;
+    float4 texColor = tex2D( smp, In.uv );
+    texColor *= color;
+    return texColor;
 }
 
 
@@ -49,7 +52,8 @@ technique Tech {
         VertexShader = compile vs_2_0 vs_main();
         PixelShader  = compile ps_2_0 ps_main();
         
-        AlphaBlendEnable = true;
+        // レンダリングステート設定
+        AlphaBlendEnable = TRUE;
         SrcBlend = SRCALPHA;
         DestBlend = INVSRCALPHA;
     }
