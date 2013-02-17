@@ -106,8 +106,8 @@ namespace GameLib{
 
         GraphicsManager gm;
 
-        gm.Create(w.handle(), 1024, 768, false, false, false);
-        gm.InitializeManager();
+        gm.Create(w.handle(), 1024, 768, false, false, false, 1024, 768);
+        //gm.Create(w.handle(), 800, 600, false, false, false,800,600);
     }
 
 

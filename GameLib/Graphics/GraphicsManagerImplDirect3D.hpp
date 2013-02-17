@@ -232,12 +232,17 @@ namespace GameLib{
                 // プレゼントパラメータの初期化
                 InitPresentParams();
                 // デバイスの作成
-                CreateDevice();
-                        
+                auto a_Success = CreateDevice();
+                    
+                // デバイスの作成に成功したら
+                if( a_Success ){ 
                 
-                // 描画可能状態を設定
-                mStatesFlag.setRenderable( true );
+                    // 描画可能状態を設定
+                    mStatesFlag.setRenderable( true );
+                    // テクスチャ0stageのSamplerStateを設定しておく。
+                    setSamplerState(0);
             
+                }
             }
 
             /// @brief デストラクタ
@@ -682,6 +687,16 @@ namespace GameLib{
                 }
 
                 return true;
+            }
+
+            /// @brief テクスチャのsamplerStateを設定します。
+            void setSamplerState(const int a_No){
+                // 拡大時のフィルター
+                mDevice->SetSamplerState(a_No, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+                // 縮小時のフィルター
+                mDevice->SetSamplerState(a_No, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+                // ミップマップ レベル間のフィルター
+                mDevice->SetSamplerState(a_No, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
             }
 
             /// @brief  メモリリソースの全解放を行います。

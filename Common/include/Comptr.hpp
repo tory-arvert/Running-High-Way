@@ -20,6 +20,7 @@
 #define INCLUDED_COMMON_COMPTR_H
 
 #include <Windows.h>
+#include <cstddef>
 
 /// @brief DirectXのCOMインターフェイス用の共有ポインタ
 template< class T >
@@ -205,6 +206,27 @@ public:
         return *this;
     }
 
+    /// @brief =nullptr代入用演算子(明示的コピー)
+    /// @param null nullptr値(引数は無視されます)
+    Com_ptr< T >& operator =( const nullptr_t null ){
+
+        // 保持するインターフェイスの参照カウンタを1つ減らす
+        if( *mppInterface ){
+            Release( *mppInterface );
+        }
+
+        // 自らは空になってしまうため参照カウンタを減らす
+        ReleaseComRef();
+
+        // ポインタを初期化
+        mppInterface = new T*;
+        *mppInterface = nullptr;
+        mCounter = new ULONG( 1 );
+
+        return *this;
+    }
+
+
     /// @brief インターフェイス代入演算子(新規インターフェイス登録)
     /// @param ptr 登録するインターフェイスへのポインタ
     /// @note 明示的にインターフェイスを登録したい場合に用います
@@ -252,6 +274,12 @@ public:
         return ( *mppInterface != NULL ? true : false );
     }
 
+    /// @brief != 比較演算子
+    /// @attention nullptr比較用のため引数は無視されます
+    bool operator !=(const nullptr_t null ) const{
+        return ( *mppInterface != nullptr ? true : false );
+    }
+
     //----------------------------------------
 
     /// @brief == 比較演算子
@@ -265,6 +293,19 @@ public:
         return ( *mppInterface != *( src.mppInterface ) ? true : false );
     }
     
+    /// @brief == 比較演算子
+    /// @attention NULL比較用のため引数は無視されます
+    bool operator ==(const int null ) const{
+        return ( *mppInterface == NULL ? true : false );
+    }
+
+    /// @brief == 比較演算子
+    /// @attention nullptr比較用のため引数は無視されます
+    bool operator ==(const nullptr_t null ) const{
+        return ( *mppInterface == nullptr ? true : false );
+    }
+
+
     //----------------------------------------
 
     /// @brief ! 単項演算子

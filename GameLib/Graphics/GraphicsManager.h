@@ -115,7 +115,7 @@ namespace GameLib{
             void setClientSize(const int a_Width, const int a_Height);
 
             /// @brief ‚»‚Ì‘¼‚ÌManager‚ğ‰Šú‰»‚µ‚Ü‚·B
-            void InitializeManager();
+            // void InitializeManager();
 
 
 

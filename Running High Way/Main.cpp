@@ -58,13 +58,49 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPInst, LPSTR lpCmd, int nCmd){
     framework.Create();
 
     
+    GameLib::Graphics::GraphicsManager gm;
+
     
-    
-    GameLib::Graphics::Sprite sp;    
-    sp.testTex();
+    GameLib::Graphics::Sprite sp;
+    sp.TestTexCreate("back001.png");
+    //sp.TestTexCreate(NULL);
     sp.Position(0,0);
-    sp.Alpha(255);
-    sp.UV(0.0f,0.0f,1.0f,1.0f);
+    //sp.UV(0.0f,0.0f,1.0f,1.0f);
+    sp.UV(0,0,1,1);
+    sp.Size(800,600);
+    sp.Scale(1,1);
+    //sp.UseTextureAlpha(true);
+    sp.Color(255,0,0);
+    sp.Alpha(128);
+    sp.Priority(0.3);
+
+    
+    GameLib::Graphics::Sprite sp2;
+    sp2.TestTexCreate("100.png");
+    sp2.Position(750,400);
+    sp2.Size(200,200);
+    //sp2.UV(0.0,0.0,2.0f,2.0f);
+    sp2.Scale(1,1);
+    sp2.Rotate(45);
+    sp2.Pivot(100,100);
+    sp2.UseTextureAlpha(true);
+    //sp2.Alpha(128);
+
+	
+    GameLib::Graphics::Sprite sp3;
+    //sp3.TestTexCreate("100.png");
+    sp3.Position(751,300);
+    sp3.Size(200,200);
+    sp3.Scale(2,2);
+    sp3.Pivot(50,0);
+    sp3.UV(0,0,1,1);
+    sp3.UseTextureAlpha(true);
+    sp3.Color(0,255,0);
+    //sp3.Rotate(45);
+    //sp3.Pivot(128,128);
+    sp3.Alpha(128);
+    sp3.Priority(0.5);
+
 
     unsigned int frame = 0;
     while( !w.isEndRequested() ){
@@ -72,11 +108,17 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPInst, LPSTR lpCmd, int nCmd){
         w.Update();
         ++frame;
 
-        Sleep(1);
+        Sleep(5);
+        sp2.Priority((float(frame)/2000.0));
 
+        gm.BeginDraw();
         sp.Draw();
+        sp3.Draw();
+        sp2.Draw();
+        //sp2.Position(100,100);
+        //sp3.Pivot(frame/600,frame/600);
         sp.DrawALL();
-        
+        gm.EndDraw();
 
         /*
         if(frame == 180){
@@ -95,11 +137,12 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPInst, LPSTR lpCmd, int nCmd){
         */
 
         tstringstream oss;
-        oss << int(frame/60) << ":" << frame << (w.isMinimized()? "Å¬‰»’†":"Å¬‰»‚¶‚á‚È‚¢‚æ");
+        oss << (frame/60) << ":" << frame << (w.isMinimized()? "Å¬‰»’†":"Å¬‰»‚¶‚á‚È‚¢‚æ");
         w.SetTitle( oss.str() );
         
     }
 
+    gm.EndDraw();
     
     return (0);
 

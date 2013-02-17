@@ -27,7 +27,7 @@
 #include "IGraphicsManagerImpl.h"
 #include "GraphicsManagerImplDirect3D.hpp"
 
-#include "Sprite.h"
+#include "Sprite.h"                         // Sprite初期化用
 
 using namespace std;
 using namespace GameLib::Graphics;
@@ -40,8 +40,6 @@ namespace{
     /// @attention 通常使用する形式ではインターフェイスで公開されているメソッドのみを使用させる。
     shared_ptr< IGraphicsManagerImpl > gImpl( nullptr );
 
-
-    
 
 } // end of namespace
 
@@ -56,6 +54,34 @@ namespace GameLib{
         /// @attention これは公開していないImplのpublicメソッドをexternで使用できるようにするためである。
         /// @attention モジュールから使用するため無名ネームスペースには隠ぺいしない。
         shared_ptr< ImplDirect3D > gImplDirect3D( nullptr );    
+
+
+        /// @class InitManagers
+        /// @brief 描画関係の各インスタンスの初期化だけを行う専用クラス
+        /// @attention 外部から処理を隠ぺいしているためにこのような形となっている。
+        class InitManagers{
+
+            //----------------------------------------------------------
+            // 特殊メンバ関数
+        public:
+            /// @brief コンストラクタ
+            InitManagers(){
+            
+                // スプライトを初期化
+                Sprite sp;
+                if(1){
+                /**/sp.Create(true);
+                }else{
+                //**/
+                    sp.Create(false);
+                }
+            }
+
+            /// @brief デストラクタ
+            ~InitManagers(){}
+           
+        };
+
 
         //----------------------------------------------------------
         // 特殊メンバ
@@ -107,6 +133,12 @@ namespace GameLib{
             // 普段はgImplを使用し、Implの公開してないpublic関数を使用するときはImplDirect3Dを使用する。            
             gImpl = static_pointer_cast<IGraphicsManagerImpl>(gImplDirect3D);
                 
+
+            // 作成済みであればその他の初期化も行う
+            // この処理はクラスを1度作成するだけでよい
+            if(gImpl != nullptr){
+                InitManagers init;            
+            }
         }
 
         /// @brief インスタンスを破棄します。
@@ -184,12 +216,12 @@ namespace GameLib{
         }
 
         /// @brief その他のManagerを初期化します。
-        void GraphicsManager::InitializeManager(){
+        // void GraphicsManager::InitializeManager(){
 
             /// @todo LineやSpriteの基底データの初期化など
-            Sprite sp;
-            sp.Create();
-        }
+            //Sprite sp;
+            //sp.Create(true);
+        // }
 
 
 

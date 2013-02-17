@@ -43,13 +43,16 @@ namespace GameLib{
                 BaseUV<float>   mUV;
                 /// @brief UV値の設定がintかfloatかの識別用フラグ
                 bool            mUVint;
+                /// @brief テクスチャのα値を使用するかどうかの識別用フラグ
+                bool            mUseAlpha;
+
 
                 //----------------------------------------------------------
                 // 特殊メンバ関数
             public:
                 /// @brief コンストラクタ
                 TextureParameter():
-                    mSize(), mUV(){} // 初期化子でメンバ変数を初期化
+                    mSize(), mUV(), mUVint(false), mUseAlpha(true){} // 初期化子でメンバ変数を初期化
 
                 /// @brief デストラクタ
                 ~TextureParameter(){}
@@ -98,6 +101,17 @@ namespace GameLib{
                     mUVint = a_Value;
                 }
 
+                /// @brief テクスチャのα値を使用するかどうかの状態を返します。
+                /// @return bool α値の有効性
+                const bool isUseAlpha() const{
+                    return mUseAlpha;
+                }
+
+                /// @brief テクスチャのα値を使用するかどうかを設定します。
+                /// @param a_Value α値を有効にするかどうか
+                void setUseAlpha(const bool a_Value){
+                    mUseAlpha = a_Value;
+                }
 
 
             };
@@ -192,6 +206,18 @@ namespace GameLib{
             /// @param a_Value int値でUVの設定が行われたかどうか 
             void setUVint(const bool a_Value){
                 mParameter.setUVint( a_Value );
+            }
+
+            /// @brief テクスチャのα値を使用するかどうかの状態を返します。
+            /// @return bool テクスチャのα値の有効性
+            const bool isTextureAlpha() const{
+                return mParameter.isUseAlpha();
+            }
+
+            /// @brief テクスチャのα値を使用するかどうかを設定します。
+            /// @param a_Value α値を有効にするかどうか
+            void UseTextureAlpha(const bool a_Value){
+                mParameter.setUseAlpha( a_Value );
             }
 
 
